@@ -1,77 +1,145 @@
-#ifndef FILEMANAGER_HPP
-#define FILEMANAGER_HPP
+#ifndef UTILITIES_HPP
+#define UTILITIES_HPP
+
 #include <iostream>
-#include <vector>
-#include <string>
 #include <fstream>
+#include <algorithm>
+#include <random>
 
-std::vector<int> loadInputFile(int option)
+std::string gerarArquivo(int tipo, int tamanho)
 {
-    std::ifstream inputFile;
-    std::string fileName;
+    std::ofstream arquivo;
+    std::string nomeArquivo;
 
-    switch (option)
+    switch (tipo)
     {
     case 1:
-        fileName = "entrada/10.txt";
+        nomeArquivo = "entrada/random/entradarandom" + std::to_string(tamanho) + ".txt";
         break;
     case 2:
-        fileName = "entrada/100.txt";
+        nomeArquivo = "entrada/crescente/entradacrescente" + std::to_string(tamanho) + ".txt";
         break;
     case 3:
-        fileName = "entrada/1000.txt";
-        break;
-    case 4:
-        fileName = "entrada/10000.txt";
-        break;
-    case 5:
-        fileName = "entrada/100000.txt";
-        break;
-    case 6:
-        fileName = "entrada/1000000.txt";
+        nomeArquivo = "entrada/decrescente/entradadecrescente" + std::to_string(tamanho) + ".txt";
         break;
     default:
-        std::cout << "Erro: valor invalido para carregar arquivo." << std::endl;
+        std::cout << "Tipo de entrada inválido." << std::endl;
+    }
+
+    arquivo.open(nomeArquivo);
+
+    if (!arquivo.is_open())
+    {
+        std::cout << "Erro ao abrir o arquivo -> " << nomeArquivo << "." << std::endl;
+        return NULL;
+    }
+
+    std::random_device rd;
+    std::mt19937 generator(rd());
+    std::uniform_int_distribution<int> distribution(1, 1000000);
+
+    // Escrever o tamanho na primeira linha do txt
+    arquivo << tamanho << std::endl;
+
+    std::vector<int> numeros;
+
+    switch (tipo)
+    {
+    case 1: // Números aleatorios
+        for (int i = 0; i < tamanho; ++i)
+        {
+            numeros.push_back(distribution(generator));
+        }
+        break;
+
+    case 2: // Números aleatorios em ordem crescente
+        for (int i = 0; i < tamanho; ++i)
+        {
+            numeros.push_back(distribution(generator));
+        }
+        std::sort(numeros.begin(), numeros.end());
+        break;
+
+    case 3: // Números aleatorios em ordem decrescente
+        for (int i = 0; i < tamanho; ++i)
+        {
+            numeros.push_back(distribution(generator));
+        }
+        std::sort(numeros.begin(), numeros.end(), std::greater<int>());
         break;
     }
 
-    inputFile.open(fileName);
-    if (!inputFile.is_open())
+    for (int num : numeros)
     {
-        std::cout << "Erro ao carregar o arquivo." << std::endl;
-        std::vector<int> vazio = {};
-        return vazio;
+        arquivo << num << std::endl;
     }
 
-    int vectorSize, num;
-    std::vector<int> loadedVector;
-    inputFile >> vectorSize;
-    for (int i = 0; i < vectorSize; i++)
-    {
-        inputFile >> num;
-        loadedVector.push_back(num);
-    }
-    inputFile.close();
-    return loadedVector;
+    arquivo.close();
+    return nomeArquivo;
 }
 
-int saveToFile(std::vector<int> &arr, std::string outputName)
+std::vector<int> carregarArquivo(const std::string &nomeArquivo)
 {
-    std::ofstream outputFile(outputName);
-    if (!outputFile.is_open())
+    std::ifstream arquivo(nomeArquivo);
+    std::vector<int> numeros;
+
+    if (!arquivo.is_open())
     {
-        std::cout << "Erro ao abrir o arquivo " << outputName << "." << std::endl;
-        return 1;
+        std::cerr << "Erro ao abrir o arquivo -> " << nomeArquivo << "." << std::endl;
+        return numeros;
     }
 
-    for (int num : arr)
+    int tamanho;
+    arquivo >> tamanho;
+
+    int num;
+    for (int i = 0; i < tamanho; i++)
     {
-        outputFile << num << std::endl;
+        arquivo >> num;
+        numeros.push_back(num);
     }
 
-    outputFile.close();
-    std::cout << "Arquivo " << outputName << " salvo com sucesso." << std::endl;
-    return 0;
+    arquivo.close();
+
+    return numeros;
 }
 
+void salvarArquivo(const std::vector<int> &numeros, int tipo, int tamanho)
+{
+    std::ofstream arquivo;
+    std::string nomeArquivo;
+
+    switch (tipo)
+    {
+    case 1:
+        nomeArquivo = "saida/random/saidarandom" + std::to_string(tamanho) + ".txt";
+        break;
+    case 2:
+        nomeArquivo = "saida/crescente/saidacrescente" + std::to_string(tamanho) + ".txt";
+        break;
+    case 3:
+        nomeArquivo = "saida/decrescente/saidadecrescente" + std::to_string(tamanho) + ".txt";
+        break;
+    default:
+        std::cerr << "Tipo de entrada inválido." << std::endl;
+        return;
+    }
+
+    arquivo.open(nomeArquivo);
+
+    if (!arquivo.is_open())
+    {
+        std::cout << "Erro ao abrir o arquivo para escrita." << std::endl;
+        return;
+    }
+
+    for (int num : numeros)
+    {
+        arquivo << num << std::endl;
+    }
+
+    arquivo.close();
+
+    std::cout << "Arquivo salvo com sucesso: " << nomeArquivo << std::endl;
+}
 #endif

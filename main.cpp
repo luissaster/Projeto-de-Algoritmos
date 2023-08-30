@@ -1,12 +1,18 @@
 #include <iostream>
 #include <vector>
+#include <chrono>
 #include "fileManager.hpp"
 #include "algoritmos/insertionSort.hpp"
 
 int main(void)
 {
-    int op, sizeChoice;
-    std::vector<int> array = {};
+    int op, sizeChoice, inputChoice;
+    std::string fileAddress;
+    std::vector<int> array;
+    auto timeStart = std::chrono::high_resolution_clock::now();
+    auto timeEnd = std::chrono::high_resolution_clock::now();
+    auto totalDuration = std::chrono::duration_cast<std::chrono::seconds>(timeEnd - timeStart);
+
     do
     {
         system("cls");
@@ -22,50 +28,32 @@ int main(void)
 
         case 1: // INSERTION-SORT
             system("cls");
-            std::cout << "Escolha o tamanho da entrada" << std::endl
-                      << "1 - 10" << std::endl
-                      << "2 - 100" << std::endl
-                      << "3 - 1000" << std::endl
-                      << "4 - 10000" << std::endl
-                      << "5 - 100000" << std::endl
-                      << "6 - 1000000" << std::endl;
-            std::cin >> sizeChoice;
-            switch (sizeChoice)
-            {
-            case 1:
-                array = loadInputFile(1);
-                array = insertionSort(array);
-                saveToFile(array, "saida/10.txt");
-                break;
-            case 2:
-                array = loadInputFile(2);
-                array = insertionSort(array);
-                saveToFile(array, "saida/100.txt");
-                break;
-            case 3:
-                array = loadInputFile(3);
-                array = insertionSort(array);
-                saveToFile(array, "saida/1000.txt");
-                break;
-            case 4:
-                array = loadInputFile(4);
-                array = insertionSort(array);
-                saveToFile(array, "saida/10000.txt");
-                break;
-            case 5:
-                array = loadInputFile(5);
-                array = insertionSort(array);
-                saveToFile(array, "saida/100000.txt");
-                break;
-            case 6:
-                array = loadInputFile(6);
-                array = insertionSort(array);
-                saveToFile(array, "saida/1000000.txt");
-                break;
-            default:
-                std::cout << "Tamanho invalido." << std::endl;
-                break;
-            }
+            std::cout << "Escolha o tipo de entrada:" << std::endl
+                      << "1 - Aleatoria" << std::endl
+                      << "2 - Crescente" << std::endl
+                      << "3 - Decrescente" << std::endl;
+            std::cin >> inputChoice;
+            system("cls");
+
+            std::cout << "Especifique o tamanho da entrada (10, 100, 1000, 10000, 100000, 1000000, ...):" << std::endl;
+            std::cin >>
+                sizeChoice;
+            system("cls");
+
+            fileAddress = gerarArquivo(inputChoice, sizeChoice);
+            array = carregarArquivo(fileAddress);
+
+            timeStart = std::chrono::high_resolution_clock::now();
+            array = insertionSort(array);
+            timeEnd = std::chrono::high_resolution_clock::now();
+            totalDuration = std::chrono::duration_cast<std::chrono::seconds>(timeEnd - timeStart);
+
+            salvarArquivo(array, inputChoice, sizeChoice);
+
+            std::cout << "Tempo de execucao: " << totalDuration.count() << " segundos." << std::endl;
+            system("pause");
+
+            break;
 
         case 2: // COMING SOON...
             break;

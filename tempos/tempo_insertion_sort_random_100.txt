@@ -1,0 +1,2 @@
+Algoritmo: insertion-sort.
+Entrada: 100 elemento(s) aleatorios.

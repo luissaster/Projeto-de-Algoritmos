@@ -6,7 +6,7 @@
 
 int main(void)
 {
-    int op, sizeChoice, inputChoice;
+    int algorithmChoice, sizeChoice, inputChoice;
     std::string fileAddress;
     std::vector<int> array;
     auto timeStart = std::chrono::high_resolution_clock::now();
@@ -19,9 +19,9 @@ int main(void)
         std::cout << "Escolha o algoritmo:" << std::endl
                   << "1 - Insertion sort" << std::endl
                   << "0 - Encerrar" << std::endl;
-        std::cin >> op;
+        std::cin >> algorithmChoice;
 
-        switch (op)
+        switch (algorithmChoice)
         {
         case 0: // END PROGRAM
             break;
@@ -49,15 +49,14 @@ int main(void)
             totalDuration = std::chrono::duration_cast<std::chrono::seconds>(timeEnd - timeStart);
 
             salvarArquivo(array, inputChoice, sizeChoice);
+            salvarTempo(algorithmChoice, inputChoice, sizeChoice, totalDuration);
 
-            std::cout << "Tempo de execucao: " << totalDuration.count() << " segundos." << std::endl;
             system("pause");
-
             break;
 
         case 2: // COMING SOON...
             break;
         }
-    } while (op != 0);
+    } while (algorithmChoice != 0);
     return 0;
 }

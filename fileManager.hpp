@@ -38,7 +38,7 @@ std::string gerarArquivo(int tipo, int tamanho)
     // Gerador pseudoaleatorio
     std::random_device rd;
     std::mt19937 generator(rd());
-    std::uniform_int_distribution<int> range(1, 1000000);
+    std::uniform_int_distribution<int> range(-1000000, 1000000);
 
     // Escrever o tamanho na primeira linha do txt
     arquivo << tamanho << std::endl;
@@ -48,7 +48,7 @@ std::string gerarArquivo(int tipo, int tamanho)
     switch (tipo)
     {
     case 1: // Números aleatorios
-        for (int i = 0; i < tamanho; ++i)
+        for (int i = 0; i < tamanho; i++)
         {
             numeros.push_back(range(generator));
         }
@@ -145,7 +145,7 @@ void salvarArquivo(const std::vector<int> &numeros, int tipo, int tamanho)
     std::cout << "Arquivo salvo com sucesso: " << nomeArquivo << std::endl;
 }
 
-void salvarTempo(int algoritmo, int tipo, int tamanho, std::chrono::seconds tempo)
+void salvarTempo(int algoritmo, int tipo, int tamanho, std::chrono::milliseconds tempo)
 {
     std::ofstream arquivo;
     std::string nomeArquivo;
@@ -185,15 +185,15 @@ void salvarTempo(int algoritmo, int tipo, int tamanho, std::chrono::seconds temp
         {
         case 1: // Random
             arquivo << "Entrada: " << tamanho << " elemento(s) aleatorios." << std::endl
-                    << "Tempo gasto: " << tempo.count() << " segundos." << std::endl;
+                    << "Tempo gasto: " << tempo.count() << " milissegundos." << std::endl;
             break;
         case 2: // Crescente
             arquivo << "Entrada: " << tamanho << " elemento(s) aleatorios em ordem crescente." << std::endl
-                    << "Tempo gasto: " << tempo.count() << " segundos." << std::endl;
+                    << "Tempo gasto: " << tempo.count() << " milissegundos." << std::endl;
             break;
         case 3: // Decrescente
             arquivo << "Entrada: " << tamanho << " elemento(s) aleatorios em ordem decrescente." << std::endl
-                    << "Tempo gasto: " << tempo.count() << " segundos." << std::endl;
+                    << "Tempo gasto: " << tempo.count() << " milissegundos." << std::endl;
             break;
         }
         break;

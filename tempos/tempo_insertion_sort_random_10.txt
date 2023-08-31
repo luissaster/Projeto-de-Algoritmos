@@ -1,2 +1,3 @@
 Algoritmo: insertion-sort.
 Entrada: 10 elemento(s) aleatorios.
+Tempo gasto: 0 milissegundos.

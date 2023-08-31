@@ -1,0 +1,3 @@
+Algoritmo: insertion-sort.
+Entrada: 100000 elemento(s) aleatorios em ordem crescente.
+Tempo gasto: 1 milissegundos.

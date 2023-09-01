@@ -135,6 +135,8 @@ void salvarArquivo(const std::vector<int> &numeros, int tipo, int tamanho)
         return;
     }
 
+    arquivo << tamanho << std::endl;
+
     for (int num : numeros)
     {
         arquivo << num << std::endl;

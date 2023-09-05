@@ -48,9 +48,9 @@ int main(void)
             fileAddress = gerarArquivo(inputChoice, sizeChoice);
             array = carregarArquivo(fileAddress);
 
-            timeStart = std::chrono::high_resolution_clock::now();
+            timeStart = std::chrono::high_resolution_clock::now(); 
             array = insertionSort(array);
-            timeEnd = std::chrono::high_resolution_clock::now();
+            timeEnd = std::chrono::high_resolution_clock::now(); 
             totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
             // Valores de tempo salvos em milissegundos pois muitos casos estavam sendo feitos em menos de 1 segundo
 

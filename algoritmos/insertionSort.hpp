@@ -6,8 +6,7 @@
 
 std::vector<int> insertionSort(std::vector<int> &arr)
 {
-    int n = arr.size();
-    for (int i = 1; i < n; i++)
+    for (int i = 1; i < arr.size(); i++)
     {
         int aux = arr[i];
         int j = i - 1;

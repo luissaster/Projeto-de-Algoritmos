@@ -2,208 +2,254 @@
 #define FILEMANAGER_HPP
 
 #include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <random>
+#include <vector>
 #include <chrono>
+#include <string>
+#include <fstream>
+#include <cstdlib>
+#include <random>
+#include <ctime>
+#include <algorithm>
 
-std::string gerarArquivo(int tipo, int tamanho)
+class FileManager
 {
-    std::ofstream arquivo;
-    std::string nomeArquivo;
+public:
+    FileManager();
+    ~FileManager();
 
-    switch (tipo)
-    {
-    case 1:
-        nomeArquivo = "entrada/random/entradarandom" + std::to_string(tamanho) + ".txt";
-        break;
-    case 2:
-        nomeArquivo = "entrada/crescente/entradacrescente" + std::to_string(tamanho) + ".txt";
-        break;
-    case 3:
-        nomeArquivo = "entrada/decrescente/entradadecrescente" + std::to_string(tamanho) + ".txt";
-        break;
-    default:
-        std::cout << "Tipo de entrada inválido." << std::endl;
-    }
+    std::string generateFile(int algorithm, int inputStyle, int inputSize);
+    std::vector<int> loadFile(const std::string &fileName);
+    void saveFile(const std::vector<int> &arr, int algorithm, int inputStyle, int inputSize);
+    void saveTime(int algorithm, int inputStyle, int inputSize, std::chrono::milliseconds time);
 
-    arquivo.open(nomeArquivo);
+private:
+    std::string generateFileName(int algorithm, int inputStyle, int inputSize);
+    std::string generateOutputFileName(int algorithm, int inputStyle, int inputSize);
+    std::string generateTimeFileName(int algorithm, int inputStyle, int inputSize);
+};
 
-    if (!arquivo.is_open())
-    {
-        std::cout << "Erro ao abrir o arquivo -> " << nomeArquivo << "." << std::endl;
-        return NULL;
-    }
+FileManager::FileManager() {}
+FileManager::~FileManager() {}
 
-    // Gerador pseudoaleatorio
+std::string FileManager::generateFile(int algorithm, int inputStyle, int inputSize)
+{
+    std::vector<int> arr;
+    std::string fileName = generateFileName(algorithm, inputStyle, inputSize);
+    std::ofstream file(fileName);
     std::random_device rd;
     std::mt19937 generator(rd());
     std::uniform_int_distribution<int> range(-1000000, 1000000);
 
-    // Escrever o tamanho na primeira linha do txt
-    arquivo << tamanho << std::endl;
-
-    std::vector<int> numeros;
-
-    switch (tipo)
+    if (!file.is_open())
     {
-    case 1: // Números aleatorios
-        for (int i = 0; i < tamanho; i++)
+        std::cout << "Error opening the file -> " << fileName << "." << std::endl;
+        return "";
+    }
+
+    file << inputSize << std::endl;
+
+    switch (inputStyle)
+    {
+    case 1: // Aleatorio
+        for (int i = 0; i < inputSize; i++)
         {
-            numeros.push_back(range(generator));
+            arr.push_back(range(generator));
         }
         break;
-
-    case 2: // Números aleatorios em ordem crescente
-        for (int i = 0; i < tamanho; ++i)
+    case 2: // Crescente
+        for (int i = 0; i < inputSize; i++)
         {
-            numeros.push_back(range(generator));
+            arr.push_back(range(generator));
         }
-        std::sort(numeros.begin(), numeros.end());
+        std::sort(arr.begin(), arr.end());
         break;
-
-    case 3: // Números aleatorios em ordem decrescente
-        for (int i = 0; i < tamanho; ++i)
+    case 3: // Decrescente
+        for (int i = 0; i < inputSize; i++)
         {
-            numeros.push_back(range(generator));
+            arr.push_back(range(generator));
         }
-        std::sort(numeros.begin(), numeros.end(), std::greater<int>());
+        std::sort(arr.begin(), arr.end(), std::greater<int>());
         break;
     }
 
-    for (int num : numeros)
+    for (int num : arr)
     {
-        arquivo << num << std::endl;
+        file << num << std::endl;
     }
-
-    arquivo.close();
-    return nomeArquivo;
+    file.close();
+    return fileName;
 }
-
-std::vector<int> carregarArquivo(const std::string &nomeArquivo)
+std::vector<int> FileManager::loadFile(const std::string &fileName)
 {
-    std::ifstream arquivo(nomeArquivo);
-    std::vector<int> numeros;
+    std::ifstream file(fileName);
+    std::vector<int> arr;
+    int size, num;
 
-    if (!arquivo.is_open())
+    if (!file.is_open())
     {
-        std::cout << "Erro ao abrir o arquivo -> " << nomeArquivo << "." << std::endl;
-        return numeros;
+        std::cout << "Error opening the file -> " << fileName << "." << std::endl;
+        return arr;
     }
 
-    int tamanho;
-    arquivo >> tamanho;
+    file >> size;
 
-    int num;
-    for (int i = 0; i < tamanho; i++)
+    for (int i = 0; i < size; i++)
     {
-        arquivo >> num;
-        numeros.push_back(num);
+        file >> num;
+        arr.push_back(num);
     }
 
-    arquivo.close();
-
-    return numeros;
+    file.close();
+    return arr;
 }
-
-void salvarArquivo(const std::vector<int> &numeros, int tipo, int tamanho)
+void FileManager::saveFile(const std::vector<int> &arr, int algorithm, int inputStyle, int inputSize)
 {
-    std::ofstream arquivo;
-    std::string nomeArquivo;
+    std::string fileName = generateOutputFileName(algorithm, inputStyle, inputSize);
+    std::ofstream file(fileName);
 
-    switch (tipo)
+    if (!file.is_open())
+    {
+        std::cout << "Error opening the file for writing." << std::endl;
+        return;
+    }
+
+    file << inputSize << std::endl;
+
+    for (int num : arr)
+    {
+        file << num << std::endl;
+    }
+
+    file.close();
+    std::cout << "File saved successfully -> " << fileName << std::endl;
+}
+void FileManager::saveTime(int algorithm, int inputStyle, int inputSize, std::chrono::milliseconds time)
+{
+    std::string fileName = generateTimeFileName(algorithm, inputStyle, inputSize);
+    std::ofstream file(fileName);
+
+    if (!file.is_open())
+    {
+        std::cout << "Error opening the file -> " << fileName << std::endl;
+        return;
+    }
+
+    file << "Algorithm: ";
+    switch (algorithm)
     {
     case 1:
-        nomeArquivo = "saida/random/saidarandom" + std::to_string(tamanho) + ".txt";
+        file << "insertion-sort";
         break;
     case 2:
-        nomeArquivo = "saida/crescente/saidacrescente" + std::to_string(tamanho) + ".txt";
+        break;
+    }
+    file << std::endl;
+
+    file << "Input: ";
+    switch (inputStyle)
+    {
+    case 1:
+        file << inputSize << " random element(s)";
+        break;
+    case 2:
+        file << inputSize << " random element(s) in ascending order";
         break;
     case 3:
-        nomeArquivo = "saida/decrescente/saidadecrescente" + std::to_string(tamanho) + ".txt";
+        file << inputSize << " random element(s) in descending order";
+        break;
+    }
+    file << std::endl;
+
+    file << "Time spent: " << time.count() << " milliseconds." << std::endl;
+
+    file.close();
+    std::cout << "Time saved to -> " << fileName << std::endl;
+}
+std::string FileManager::generateFileName(int algorithm, int inputStyle, int inputSize)
+{
+    std::string typeName;
+    switch (algorithm)
+    {
+    case 1: // insertion sort
+        switch (inputStyle)
+        {
+        case 1:
+            typeName = "Insertion Sort/Arquivos de Entrada/Random/EntradaRandom" + std::to_string(inputSize) + ".txt";
+            break;
+        case 2:
+            typeName = "Insertion Sort/Arquivos de Entrada/Crescente/EntradaCrescente" + std::to_string(inputSize) + ".txt";
+            break;
+        case 3:
+            typeName = "Insertion Sort/Arquivos de Entrada/Decrescente/EntradeDecrescente" + std::to_string(inputSize) + ".txt";
+            break;
+        default:
+            std::cout << "Invalid input type." << std::endl;
+            return "";
+        }
+        break;
+    case 2:
         break;
     default:
-        std::cout << "Tipo inválido." << std::endl;
-        return;
+        break;
     }
-
-    arquivo.open(nomeArquivo);
-
-    if (!arquivo.is_open())
-    {
-        std::cout << "Erro ao abrir o arquivo para escrita." << std::endl;
-        return;
-    }
-
-    arquivo << tamanho << std::endl;
-
-    for (int num : numeros)
-    {
-        arquivo << num << std::endl;
-    }
-
-    arquivo.close();
-
-    std::cout << "Arquivo salvo com sucesso: " << nomeArquivo << std::endl;
+    return typeName;
 }
-
-void salvarTempo(int algoritmo, int tipo, int tamanho, std::chrono::milliseconds tempo)
+std::string FileManager::generateOutputFileName(int algorithm, int inputStyle, int inputSize)
 {
-    std::ofstream arquivo;
-    std::string nomeArquivo;
-
-    switch (algoritmo)
+    std::string typeName;
+    switch (algorithm)
     {
-    case 1: // Insertion-sort
-        switch (tipo)
+    case 1: // insertion sort
+        switch (inputStyle)
         {
-        case 1: // Random
-            nomeArquivo = "tempos/tempo_insertion_sort_random_" + std::to_string(tamanho) + ".txt";
+        case 1:
+            typeName = "Insertion Sort/Arquivos de Saida/Random/SaidaRandom" + std::to_string(inputSize) + ".txt";
             break;
-        case 2: // Crescente
-            nomeArquivo = "tempos/tempo_insertion_sort_crescente_" + std::to_string(tamanho) + ".txt";
+        case 2:
+            typeName = "Insertion Sort/Arquivos de Saida/Crescente/SaidaCrescente" + std::to_string(inputSize) + ".txt";
             break;
-        case 3: // Decrescente
-            nomeArquivo = "tempos/tempo_insertion_sort_decrescente_" + std::to_string(tamanho) + ".txt";
+        case 3:
+            typeName = "Insertion Sort/Arquivos de Saida/Decrescente/SaidaDecrescente" + std::to_string(inputSize) + ".txt";
             break;
+        default:
+            std::cout << "Invalid input type." << std::endl;
+            return "";
         }
         break;
     case 2:
         break;
+    default:
+        break;
     }
-
-    arquivo.open(nomeArquivo);
-    if (!arquivo.is_open())
+    return typeName;
+}
+std::string FileManager::generateTimeFileName(int algorithm, int inputStyle, int inputSize)
+{
+    std::string typeName;
+    switch (algorithm)
     {
-        std::cout << "Erro ao abrir o arquivo -> " << nomeArquivo << "." << std::endl;
-        return;
-    }
-
-    switch (algoritmo)
-    {
-    case 1: // Insertion-sort
-        arquivo << "Algoritmo: insertion-sort." << std::endl;
-        switch (tipo)
+    case 1: // insertion sort
+        switch (inputStyle)
         {
-        case 1: // Random
-            arquivo << "Entrada: " << tamanho << " elemento(s) aleatorios." << std::endl
-                    << "Tempo gasto: " << tempo.count() << " milissegundos." << std::endl;
+        case 1:
+            typeName = "Insertion Sort/Arquivos de Tempo/Random/TempoRandom" + std::to_string(inputSize) + ".txt";
             break;
-        case 2: // Crescente
-            arquivo << "Entrada: " << tamanho << " elemento(s) aleatorios em ordem crescente." << std::endl
-                    << "Tempo gasto: " << tempo.count() << " milissegundos." << std::endl;
+        case 2:
+            typeName = "Insertion Sort/Arquivos de Tempo/Crescente/TempoCrescente" + std::to_string(inputSize) + ".txt";
             break;
-        case 3: // Decrescente
-            arquivo << "Entrada: " << tamanho << " elemento(s) aleatorios em ordem decrescente." << std::endl
-                    << "Tempo gasto: " << tempo.count() << " milissegundos." << std::endl;
+        case 3:
+            typeName = "Insertion Sort/Arquivos de Tempo/Decrescente/TempoDecrescente" + std::to_string(inputSize) + ".txt";
             break;
+        default:
+            std::cout << "Invalid input type." << std::endl;
+            return "";
         }
         break;
     case 2:
         break;
+    default:
+        break;
     }
-
-    arquivo.close();
-    std::cout << "Tempo salvo em -> " << nomeArquivo << "." << std::endl;
+    return typeName;
 }
 #endif

@@ -6,6 +6,9 @@
 #include "fileManager.hpp"
 #include "algorithms.hpp"
 
+Algorithms algorithms;
+FileManager fm;
+
 class Interface
 {
 public:
@@ -22,9 +25,6 @@ public:
 
     void runAlgorithm(std::vector<int> &arr, int algorithm, int inputStyle, int inputSize)
     {
-        Algorithms algorithms;
-        FileManager fm;
-
         auto timeStart = std::chrono::high_resolution_clock::now();
         auto timeEnd = std::chrono::high_resolution_clock::now();
         auto totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
@@ -36,8 +36,7 @@ public:
             algorithms.insertionSort(arr);
             timeEnd = std::chrono::high_resolution_clock::now();
             totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
-            fm.saveFile(arr, algorithm, inputStyle, inputSize);
-            fm.saveTime(algorithm, inputStyle, inputSize, totalDuration);
+            saveInfo(arr, algorithm, inputStyle, inputSize, totalDuration);
             pauseConsole();
             break;
         case 2:
@@ -101,6 +100,11 @@ public:
         std::cin >> sizeChoice;
         clearConsole();
         return sizeChoice;
+    }
+    void saveInfo(const std::vector<int> &arr, int algorithm, int inputStyle, int inputSize, std::chrono::milliseconds totalDuration)
+    {
+        fm.saveFile(arr, algorithm, inputStyle, inputSize);
+        fm.saveTime(algorithm, inputStyle, inputSize, totalDuration);
     }
 };
 

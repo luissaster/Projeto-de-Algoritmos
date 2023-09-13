@@ -29,7 +29,6 @@ int main(void)
             fileAddress = fm.generateFile(algorithmChoice, inputChoice, inputSize);
             arr = fm.loadFile(fileAddress);
             ui.runAlgorithm(arr, algorithmChoice, inputChoice, inputSize);
-            system("pause");
         }
         else
         {

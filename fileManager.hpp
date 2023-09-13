@@ -6,10 +6,19 @@
 #include <chrono>
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <cstdlib>
 #include <random>
 #include <ctime>
 #include <algorithm>
+#include <sys/stat.h>
+#include "interface.hpp"
+
+#if defined(_WIN32) || defined(_WIN64)
+#define PATH_SEPARATOR '\\'
+#else
+#define PATH_SEPARATOR '/'
+#endif
 
 class FileManager
 {
@@ -19,6 +28,7 @@ public:
 
     std::string generateFile(int algorithm, int inputStyle, int inputSize);
     std::vector<int> loadFile(const std::string &fileName);
+    bool checkIfDirectoryExists(const std::string &address);
     void saveFile(const std::vector<int> &arr, int algorithm, int inputStyle, int inputSize);
     void saveTime(int algorithm, int inputStyle, int inputSize, std::chrono::milliseconds time);
 
@@ -77,6 +87,8 @@ std::string FileManager::generateFile(int algorithm, int inputStyle, int inputSi
         file << num << std::endl;
     }
     file.close();
+
+    std::cout << "Input file saved succesfully -> " << fileName << std::endl;
     return fileName;
 }
 std::vector<int> FileManager::loadFile(const std::string &fileName)
@@ -102,6 +114,36 @@ std::vector<int> FileManager::loadFile(const std::string &fileName)
     file.close();
     return arr;
 }
+bool FileManager::checkIfDirectoryExists(const std::string &address)
+{
+    // Replace all occurrences of '/' and '\' with the appropriate path separator
+    std::string normalizedPath = address;
+    std::replace(normalizedPath.begin(), normalizedPath.end(), '/', PATH_SEPARATOR);
+    std::replace(normalizedPath.begin(), normalizedPath.end(), '\\', PATH_SEPARATOR);
+
+    // Split the normalized file path into a list of folder names
+    std::istringstream iss(normalizedPath);
+    std::string folder;
+    std::string currentPath = "";
+
+    while (std::getline(iss, folder, PATH_SEPARATOR))
+    {
+        currentPath += folder + PATH_SEPARATOR;
+        struct stat info;
+
+        if (stat(currentPath.c_str(), &info) != 0 || !(info.st_mode & S_IFDIR))
+        {
+            // The folder doesn't exist, create it
+            if (mkdir(currentPath.c_str(), 0777) != 0)
+            {
+                std::cerr << "Failed to create folder: " << currentPath << std::endl;
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
 void FileManager::saveFile(const std::vector<int> &arr, int algorithm, int inputStyle, int inputSize)
 {
     std::string fileName = generateOutputFileName(algorithm, inputStyle, inputSize);
@@ -121,7 +163,7 @@ void FileManager::saveFile(const std::vector<int> &arr, int algorithm, int input
     }
 
     file.close();
-    std::cout << "File saved successfully -> " << fileName << std::endl;
+    std::cout << "Output file saved successfully -> " << fileName << std::endl;
 }
 void FileManager::saveTime(int algorithm, int inputStyle, int inputSize, std::chrono::milliseconds time)
 {
@@ -163,24 +205,27 @@ void FileManager::saveTime(int algorithm, int inputStyle, int inputSize, std::ch
     file << "Time spent: " << time.count() << " milliseconds." << std::endl;
 
     file.close();
-    std::cout << "Time saved to -> " << fileName << std::endl;
+    std::cout << "Time saved succesfully -> " << fileName << std::endl;
 }
 std::string FileManager::generateFileName(int algorithm, int inputStyle, int inputSize)
 {
-    std::string typeName;
+    std::string typeName, inputName;
     switch (algorithm)
     {
     case 1: // insertion sort
         switch (inputStyle)
         {
         case 1:
-            typeName = "Insertion Sort/Arquivos de Entrada/Random/EntradaRandom" + std::to_string(inputSize) + ".txt";
+            typeName = "Insertion Sort/Arquivos de Entrada/Random";
+            inputName = "Random";
             break;
         case 2:
-            typeName = "Insertion Sort/Arquivos de Entrada/Crescente/EntradaCrescente" + std::to_string(inputSize) + ".txt";
+            typeName = "Insertion Sort/Arquivos de Entrada/Crescente";
+            inputName = "Crescente";
             break;
         case 3:
-            typeName = "Insertion Sort/Arquivos de Entrada/Decrescente/EntradeDecrescente" + std::to_string(inputSize) + ".txt";
+            typeName = "Insertion Sort/Arquivos de Entrada/Decrescente";
+            inputName = "Decrescente";
             break;
         default:
             std::cout << "Invalid input type." << std::endl;
@@ -192,24 +237,37 @@ std::string FileManager::generateFileName(int algorithm, int inputStyle, int inp
     default:
         break;
     }
+
+    // Create the directory structure
+    if (!checkIfDirectoryExists(typeName))
+    {
+        return "";
+    }
+
+    // Append the file name with .txt
+    typeName += "/Entrada" + inputName + std::to_string(inputSize) + ".txt";
+
     return typeName;
 }
 std::string FileManager::generateOutputFileName(int algorithm, int inputStyle, int inputSize)
 {
-    std::string typeName;
+    std::string typeName, inputName;
     switch (algorithm)
     {
     case 1: // insertion sort
         switch (inputStyle)
         {
         case 1:
-            typeName = "Insertion Sort/Arquivos de Saida/Random/SaidaRandom" + std::to_string(inputSize) + ".txt";
+            typeName = "Insertion Sort/Arquivos de Saida/Random";
+            inputName = "Random";
             break;
         case 2:
-            typeName = "Insertion Sort/Arquivos de Saida/Crescente/SaidaCrescente" + std::to_string(inputSize) + ".txt";
+            typeName = "Insertion Sort/Arquivos de Saida/Crescente";
+            inputName = "Crescente";
             break;
         case 3:
-            typeName = "Insertion Sort/Arquivos de Saida/Decrescente/SaidaDecrescente" + std::to_string(inputSize) + ".txt";
+            typeName = "Insertion Sort/Arquivos de Saida/Decrescente";
+            inputName = "Decrescente";
             break;
         default:
             std::cout << "Invalid input type." << std::endl;
@@ -221,24 +279,37 @@ std::string FileManager::generateOutputFileName(int algorithm, int inputStyle, i
     default:
         break;
     }
+
+    // Create the directory structure
+    if (!checkIfDirectoryExists(typeName))
+    {
+        return "";
+    }
+
+    // Append the file name with .txt
+    typeName += "/Saida" + inputName + std::to_string(inputSize) + ".txt";
+
     return typeName;
 }
 std::string FileManager::generateTimeFileName(int algorithm, int inputStyle, int inputSize)
 {
-    std::string typeName;
+    std::string typeName, inputName;
     switch (algorithm)
     {
     case 1: // insertion sort
         switch (inputStyle)
         {
         case 1:
-            typeName = "Insertion Sort/Arquivos de Tempo/Random/TempoRandom" + std::to_string(inputSize) + ".txt";
+            typeName = "Insertion Sort/Arquivos de Tempo/Random";
+            inputName = "Random";
             break;
         case 2:
-            typeName = "Insertion Sort/Arquivos de Tempo/Crescente/TempoCrescente" + std::to_string(inputSize) + ".txt";
+            typeName = "Insertion Sort/Arquivos de Tempo/Crescente";
+            inputName = "Crescente";
             break;
         case 3:
-            typeName = "Insertion Sort/Arquivos de Tempo/Decrescente/TempoDecrescente" + std::to_string(inputSize) + ".txt";
+            typeName = "Insertion Sort/Arquivos de Tempo/Decrescente";
+            inputName = "Decrescente";
             break;
         default:
             std::cout << "Invalid input type." << std::endl;
@@ -250,6 +321,16 @@ std::string FileManager::generateTimeFileName(int algorithm, int inputStyle, int
     default:
         break;
     }
+
+    // Create the directory structure
+    if (!checkIfDirectoryExists(typeName))
+    {
+        return "";
+    }
+
+    // Append the file name with .txt
+    typeName += "/Tempo" + inputName + std::to_string(inputSize) + ".txt";
+
     return typeName;
 }
 #endif

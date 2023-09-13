@@ -1,3 +1,0 @@
-Algorithm: insertion-sort
-Input: 1000000 random element(s) in descending order
-Time spent: 3198224 milliseconds.

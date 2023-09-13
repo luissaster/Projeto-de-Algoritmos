@@ -52,7 +52,7 @@ std::string FileManager::generateFile(int algorithm, int inputStyle, int inputSi
 
     if (!file.is_open())
     {
-        std::cout << "Error opening the file -> " << fileName << "." << std::endl;
+        std::cerr << "Error opening the file -> " << fileName << "." << std::endl;
         return "";
     }
 
@@ -60,20 +60,20 @@ std::string FileManager::generateFile(int algorithm, int inputStyle, int inputSi
 
     switch (inputStyle)
     {
-    case 1: // Aleatorio
+    case 1: // Random
         for (int i = 0; i < inputSize; i++)
         {
             arr.push_back(range(generator));
         }
         break;
-    case 2: // Crescente
+    case 2: // Ascending
         for (int i = 0; i < inputSize; i++)
         {
             arr.push_back(range(generator));
         }
         std::sort(arr.begin(), arr.end());
         break;
-    case 3: // Decrescente
+    case 3: // Descending
         for (int i = 0; i < inputSize; i++)
         {
             arr.push_back(range(generator));
@@ -88,9 +88,10 @@ std::string FileManager::generateFile(int algorithm, int inputStyle, int inputSi
     }
     file.close();
 
-    std::cout << "Input file saved succesfully -> " << fileName << std::endl;
+    std::cout << "Input file saved successfully -> " << fileName << std::endl;
     return fileName;
 }
+
 std::vector<int> FileManager::loadFile(const std::string &fileName)
 {
     std::ifstream file(fileName);
@@ -99,7 +100,7 @@ std::vector<int> FileManager::loadFile(const std::string &fileName)
 
     if (!file.is_open())
     {
-        std::cout << "Error opening the file -> " << fileName << "." << std::endl;
+        std::cerr << "Error opening the file -> " << fileName << "." << std::endl;
         return arr;
     }
 
@@ -114,9 +115,10 @@ std::vector<int> FileManager::loadFile(const std::string &fileName)
     file.close();
     return arr;
 }
+
 bool FileManager::checkIfDirectoryExists(const std::string &address)
 {
-    // Replace all occurrences of '/' and '\' with the appropriate path separator
+    // Replace all occurrences of '/' and '\' with the appropriate path separator (As Windows uses a different separator)
     std::string normalizedPath = address;
     std::replace(normalizedPath.begin(), normalizedPath.end(), '/', PATH_SEPARATOR);
     std::replace(normalizedPath.begin(), normalizedPath.end(), '\\', PATH_SEPARATOR);
@@ -144,6 +146,7 @@ bool FileManager::checkIfDirectoryExists(const std::string &address)
 
     return true;
 }
+
 void FileManager::saveFile(const std::vector<int> &arr, int algorithm, int inputStyle, int inputSize)
 {
     std::string fileName = generateOutputFileName(algorithm, inputStyle, inputSize);
@@ -151,7 +154,7 @@ void FileManager::saveFile(const std::vector<int> &arr, int algorithm, int input
 
     if (!file.is_open())
     {
-        std::cout << "Error opening the file for writing." << std::endl;
+        std::cerr << "Error opening the file for writing." << std::endl;
         return;
     }
 
@@ -165,6 +168,7 @@ void FileManager::saveFile(const std::vector<int> &arr, int algorithm, int input
     file.close();
     std::cout << "Output file saved successfully -> " << fileName << std::endl;
 }
+
 void FileManager::saveTime(int algorithm, int inputStyle, int inputSize, std::chrono::milliseconds time)
 {
     std::string fileName = generateTimeFileName(algorithm, inputStyle, inputSize);
@@ -172,7 +176,7 @@ void FileManager::saveTime(int algorithm, int inputStyle, int inputSize, std::ch
 
     if (!file.is_open())
     {
-        std::cout << "Error opening the file -> " << fileName << std::endl;
+        std::cerr << "Error opening the file -> " << fileName << std::endl;
         return;
     }
 
@@ -180,10 +184,13 @@ void FileManager::saveTime(int algorithm, int inputStyle, int inputSize, std::ch
     switch (algorithm)
     {
     case 1:
-        file << "insertion-sort";
+        file << "Insertion Sort";
         break;
-    case 2:
-        break;
+        // Add cases for other algorithms if needed
+
+    default:
+        std::cerr << "Invalid algorithm." << std::endl;
+        return;
     }
     file << std::endl;
 
@@ -199,20 +206,24 @@ void FileManager::saveTime(int algorithm, int inputStyle, int inputSize, std::ch
     case 3:
         file << inputSize << " random element(s) in descending order";
         break;
+    default:
+        std::cerr << "Invalid input style." << std::endl;
+        return;
     }
     file << std::endl;
 
     file << "Time spent: " << time.count() << " milliseconds." << std::endl;
 
     file.close();
-    std::cout << "Time saved succesfully -> " << fileName << std::endl;
+    std::cout << "Time saved successfully -> " << fileName << std::endl;
 }
+
 std::string FileManager::generateFileName(int algorithm, int inputStyle, int inputSize)
 {
     std::string typeName, inputName;
     switch (algorithm)
     {
-    case 1: // insertion sort
+    case 1: // Insertion Sort
         switch (inputStyle)
         {
         case 1:
@@ -228,14 +239,15 @@ std::string FileManager::generateFileName(int algorithm, int inputStyle, int inp
             inputName = "Decrescente";
             break;
         default:
-            std::cout << "Invalid input type." << std::endl;
+            std::cerr << "Invalid input type." << std::endl;
             return "";
         }
         break;
-    case 2:
-        break;
+        // Add cases for other algorithms if needed
+
     default:
-        break;
+        std::cerr << "Invalid algorithm." << std::endl;
+        return "";
     }
 
     // Create the directory structure
@@ -249,12 +261,13 @@ std::string FileManager::generateFileName(int algorithm, int inputStyle, int inp
 
     return typeName;
 }
+
 std::string FileManager::generateOutputFileName(int algorithm, int inputStyle, int inputSize)
 {
     std::string typeName, inputName;
     switch (algorithm)
     {
-    case 1: // insertion sort
+    case 1: // Insertion Sort
         switch (inputStyle)
         {
         case 1:
@@ -270,14 +283,15 @@ std::string FileManager::generateOutputFileName(int algorithm, int inputStyle, i
             inputName = "Decrescente";
             break;
         default:
-            std::cout << "Invalid input type." << std::endl;
+            std::cerr << "Invalid input type." << std::endl;
             return "";
         }
         break;
-    case 2:
-        break;
+        // Add cases for other algorithms if needed
+
     default:
-        break;
+        std::cerr << "Invalid algorithm." << std::endl;
+        return "";
     }
 
     // Create the directory structure
@@ -291,12 +305,13 @@ std::string FileManager::generateOutputFileName(int algorithm, int inputStyle, i
 
     return typeName;
 }
+
 std::string FileManager::generateTimeFileName(int algorithm, int inputStyle, int inputSize)
 {
     std::string typeName, inputName;
     switch (algorithm)
     {
-    case 1: // insertion sort
+    case 1: // Insertion Sort
         switch (inputStyle)
         {
         case 1:
@@ -312,14 +327,15 @@ std::string FileManager::generateTimeFileName(int algorithm, int inputStyle, int
             inputName = "Decrescente";
             break;
         default:
-            std::cout << "Invalid input type." << std::endl;
+            std::cerr << "Invalid input type." << std::endl;
             return "";
         }
         break;
-    case 2:
-        break;
+        // Add cases for other algorithms if needed
+
     default:
-        break;
+        std::cerr << "Invalid algorithm." << std::endl;
+        return "";
     }
 
     // Create the directory structure
@@ -333,4 +349,5 @@ std::string FileManager::generateTimeFileName(int algorithm, int inputStyle, int
 
     return typeName;
 }
+
 #endif

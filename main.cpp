@@ -13,16 +13,17 @@ int main(void)
     std::string fileAddress;
     std::vector<int> arr;
     int algorithmChoice, inputChoice, inputSize;
+
     do
     {
         ui.showTitle();
 
         algorithmChoice = ui.chooseAlgorithm();
-        if (algorithmChoice == 0)
+        if (algorithmChoice == 0) // End application
         {
             return 0;
         }
-        else if (algorithmChoice > 0 && algorithmChoice < 2)
+        else if (algorithmChoice > 0 && algorithmChoice <= 2) // Replace 2 with the number of the last algorithm (check interface.hpp)
         {
             inputChoice = ui.chooseInputStyle();
             inputSize = ui.chooseInputSize();
@@ -36,5 +37,6 @@ int main(void)
         }
 
     } while (algorithmChoice != 0);
+
     return 0;
 }

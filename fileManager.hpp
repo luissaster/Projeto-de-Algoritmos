@@ -11,15 +11,8 @@
 #include <random>
 #include <ctime>
 #include <algorithm>
-#include <sys/stat.h>
+#include <filesystem>
 #include "interface.hpp"
-
-#if defined(_WIN32) || defined(_WIN64)
-#define PATH_SEPARATOR '\\'
-#else
-#define PATH_SEPARATOR '/'
-#endif
-
 class FileManager
 {
 public:
@@ -118,33 +111,24 @@ std::vector<int> FileManager::loadFile(const std::string &fileName)
 
 bool FileManager::checkIfDirectoryExists(const std::string &address)
 {
-    // Replace all occurrences of '/' and '\' with the appropriate path separator (As Windows uses a different separator)
-    std::string normalizedPath = address;
-    std::replace(normalizedPath.begin(), normalizedPath.end(), '/', PATH_SEPARATOR);
-    std::replace(normalizedPath.begin(), normalizedPath.end(), '\\', PATH_SEPARATOR);
+    // Use std::filesystem::path to handle the path
+    std::filesystem::path normalizedPath = address;
 
-    // Split the normalized file path into a list of folder names
-    std::istringstream iss(normalizedPath);
-    std::string folder;
-    std::string currentPath = "";
+    // Replace all occurrences of '/' and '\' with the appropriate path separator
+    normalizedPath = normalizedPath.make_preferred();
 
-    while (std::getline(iss, folder, PATH_SEPARATOR))
+    // Create the directory path
+    try
     {
-        currentPath += folder + PATH_SEPARATOR;
-        struct stat info;
-
-        if (stat(currentPath.c_str(), &info) != 0 || !(info.st_mode & S_IFDIR))
-        {
-            // The folder doesn't exist, create it
-            if (mkdir(currentPath.c_str(), 0777) != 0)
-            {
-                std::cerr << "Failed to create folder: " << currentPath << std::endl;
-                return false;
-            }
-        }
+        std::filesystem::create_directories(normalizedPath);
+        std::cout << "Folder(s) created successfully -> " << address << std::endl;
+        return true;
     }
-
-    return true;
+    catch (const std::exception &ex)
+    {
+        std::cerr << "Failed to create folder(s) -> " << normalizedPath.string() << " - " << ex.what() << std::endl;
+        return false;
+    }
 }
 
 void FileManager::saveFile(const std::vector<int> &arr, int algorithm, int inputStyle, int inputSize)

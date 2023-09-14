@@ -75,6 +75,8 @@ public:
         std::cout << std::endl
                   << "Escolha o algoritmo:" << std::endl
                   << "1 - Insertion sort" << std::endl
+                  << "2 - Bubble sort" << std::endl
+                  << "3 - Selection sort" << std::endl
                   << "0 - Encerrar" << std::endl;
         std::cin >> algorithmChoice;
         clearConsole();

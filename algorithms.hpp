@@ -11,12 +11,14 @@ public:
     ~Algorithms();
 
     void insertionSort(std::vector<int> &);
+    void bubbleSort(std::vector<int> &);
+    void selectionSort(std::vector<int> &);
 
 private:
 };
 
-Algorithms::Algorithms(){}
-Algorithms::~Algorithms(){}
+Algorithms::Algorithms() {}
+Algorithms::~Algorithms() {}
 
 void Algorithms::insertionSort(std::vector<int> &arr)
 {

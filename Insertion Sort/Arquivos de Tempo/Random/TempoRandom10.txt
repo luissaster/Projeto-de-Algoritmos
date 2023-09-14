@@ -1,3 +1,0 @@
-Algorithm: Insertion Sort
-Input: 10 random element(s)
-Time spent: 0 milliseconds.

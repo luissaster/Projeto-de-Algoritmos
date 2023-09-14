@@ -39,8 +39,23 @@ public:
             saveInfo(arr, algorithm, inputStyle, inputSize, totalDuration);
             pauseConsole();
             break;
-        case 2:
+        case 2: // Bubble sort
+            timeStart = std::chrono::high_resolution_clock::now();
+            algorithms.bubbleSort(arr);
+            timeEnd = std::chrono::high_resolution_clock::now();
+            totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
+            saveInfo(arr, algorithm, inputStyle, inputSize, totalDuration);
+            pauseConsole();
             break;
+        case 3: // Selection sort
+            timeStart = std::chrono::high_resolution_clock::now();
+            algorithms.selectionSort(arr);
+            timeEnd = std::chrono::high_resolution_clock::now();
+            totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
+            saveInfo(arr, algorithm, inputStyle, inputSize, totalDuration);
+            pauseConsole();
+            break;
+
         default:
             std::cout << "Opcao invalida." << std::endl;
             break;

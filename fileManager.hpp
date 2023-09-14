@@ -266,16 +266,45 @@ std::string FileManager::generateOutputFileName(int algorithm, int inputStyle, i
             typeName = "Insertion Sort/Arquivos de Saida/Decrescente";
             inputName = "Decrescente";
             break;
-        default:
-            std::cerr << "Invalid input type." << std::endl;
-            return "";
         }
         break;
-        // Add cases for other algorithms if needed
 
-    default:
-        std::cerr << "Invalid algorithm." << std::endl;
-        return "";
+    case 2: // Bubble Sort
+        switch (inputStyle)
+        {
+        case 1:
+            typeName = "Bubble Sort/Arquivos de Saida/Random";
+            inputName = "Random";
+            break;
+        case 2:
+            typeName = "Bubble Sort/Arquivos de Saida/Crescente";
+            inputName = "Crescente";
+            break;
+
+        case 3:
+            typeName = "Bubble Sort/Arquivos de Saida/Decrescente";
+            inputName = "Decrescente";
+            break;
+        }
+        break;
+
+    case 3: // Selection Sort
+        switch (inputStyle)
+        {
+        case 1:
+            typeName = "Selection Sort/Arquivos de Saida/Random";
+            inputName = "Random";
+            break;
+        case 2:
+            typeName = "Selection Sort/Arquivos de Saida/Crescente";
+            inputName = "Crescente";
+            break;
+        case 3:
+            typeName = "Selection Sort/Arquivos de Saida/Decrescente";
+            inputName = "Decrescente";
+            break;
+        }
+        break;
     }
 
     // Create the directory structure

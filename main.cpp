@@ -27,7 +27,7 @@ int main(void)
         {
             inputChoice = ui.chooseInputStyle();
             inputSize = ui.chooseInputSize();
-            fileAddress = fm.generateFile(algorithmChoice, inputChoice, inputSize);
+            fileAddress = fm.generateFile((AlgorithmType)algorithmChoice, (InputType)inputChoice, inputSize);
             arr = fm.loadFile(fileAddress);
             ui.runAlgorithm(arr, algorithmChoice, inputChoice, inputSize);
         }

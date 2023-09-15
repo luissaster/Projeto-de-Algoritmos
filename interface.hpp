@@ -36,7 +36,7 @@ public:
             algorithms.insertionSort(arr);
             timeEnd = std::chrono::high_resolution_clock::now();
             totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
-            saveInfo(arr, algorithm, inputStyle, inputSize, totalDuration);
+            saveInfo(arr, (AlgorithmType)algorithm, (InputType)inputStyle, inputSize, totalDuration);
             pauseConsole();
             break;
         case 2: // Bubble sort
@@ -44,7 +44,7 @@ public:
             algorithms.bubbleSort(arr);
             timeEnd = std::chrono::high_resolution_clock::now();
             totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
-            saveInfo(arr, algorithm, inputStyle, inputSize, totalDuration);
+            saveInfo(arr, (AlgorithmType)algorithm, (InputType)inputStyle, inputSize, totalDuration);
             pauseConsole();
             break;
         case 3: // Selection sort
@@ -52,7 +52,7 @@ public:
             algorithms.selectionSort(arr);
             timeEnd = std::chrono::high_resolution_clock::now();
             totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
-            saveInfo(arr, algorithm, inputStyle, inputSize, totalDuration);
+            saveInfo(arr, (AlgorithmType)algorithm, (InputType)inputStyle, inputSize, totalDuration);
             pauseConsole();
             break;
 
@@ -84,7 +84,7 @@ public:
 #endif
     }
 
-    int chooseAlgorithm()
+    AlgorithmType chooseAlgorithm()
     {
         int algorithmChoice;
         std::cout << std::endl
@@ -95,10 +95,10 @@ public:
                   << "0 - Encerrar" << std::endl;
         std::cin >> algorithmChoice;
         clearConsole();
-        return algorithmChoice;
+        return (AlgorithmType)algorithmChoice;
     }
 
-    int chooseInputStyle()
+    InputType chooseInputStyle()
     {
         int inputChoice;
         std::cout << "Escolha o tipo de entrada:" << std::endl
@@ -107,7 +107,7 @@ public:
                   << "3 - Decrescente" << std::endl;
         std::cin >> inputChoice;
         clearConsole();
-        return inputChoice;
+        return (InputType)inputChoice;
     }
 
     int chooseInputSize()
@@ -118,7 +118,7 @@ public:
         clearConsole();
         return sizeChoice;
     }
-    void saveInfo(const std::vector<int> &arr, int algorithm, int inputStyle, int inputSize, std::chrono::milliseconds totalDuration)
+    void saveInfo(const std::vector<int> &arr, AlgorithmType algorithm, InputType inputStyle, int inputSize, std::chrono::milliseconds totalDuration)
     {
         fm.saveFile(arr, algorithm, inputStyle, inputSize);
         fm.saveTime(algorithm, inputStyle, inputSize, totalDuration);

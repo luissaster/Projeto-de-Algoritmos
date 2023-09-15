@@ -23,7 +23,7 @@ public:
                   << "|-------------------------------------------|" << std::endl;
     }
 
-    void runAlgorithm(std::vector<int> &arr, int algorithm, int inputStyle, int inputSize)
+    void runAlgorithm(std::vector<int> &arr, AlgorithmType algorithm, InputType inputStyle, int inputSize)
     {
         auto timeStart = std::chrono::high_resolution_clock::now();
         auto timeEnd = std::chrono::high_resolution_clock::now();
@@ -31,7 +31,7 @@ public:
 
         switch (algorithm)
         {
-        case 1: // Insertion sort
+        case Insertion_Sort:
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.insertionSort(arr);
             timeEnd = std::chrono::high_resolution_clock::now();
@@ -39,7 +39,7 @@ public:
             saveInfo(arr, (AlgorithmType)algorithm, (InputType)inputStyle, inputSize, totalDuration);
             pauseConsole();
             break;
-        case 2: // Bubble sort
+        case Bubble_Sort:
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.bubbleSort(arr);
             timeEnd = std::chrono::high_resolution_clock::now();
@@ -47,7 +47,7 @@ public:
             saveInfo(arr, (AlgorithmType)algorithm, (InputType)inputStyle, inputSize, totalDuration);
             pauseConsole();
             break;
-        case 3: // Selection sort
+        case Selection_Sort: // Selection sort
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.selectionSort(arr);
             timeEnd = std::chrono::high_resolution_clock::now();
@@ -65,10 +65,8 @@ public:
     void clearConsole()
     {
 #if defined(_WIN32) || defined(_WIN64)
-        // Windows operating system
         system("cls");
 #else
-        // Assuming a Unix-like operating system (Linux, macOS, etc.)
         system("clear");
 #endif
     }
@@ -76,10 +74,8 @@ public:
     void pauseConsole()
     {
 #if defined(_WIN32) || defined(_WIN64)
-        // Windows operating system
         system("pause");
 #else
-        // Assuming a Unix-like operating system (Linux, macOS, etc.)
         system("read -p 'Press Enter to continue...' key");
 #endif
     }

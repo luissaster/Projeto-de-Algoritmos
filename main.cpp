@@ -17,19 +17,19 @@ int main(void)
     do
     {
         ui.showTitle();
-
         algorithmChoice = ui.chooseAlgorithm();
+        
         if (algorithmChoice == 0) // End application
         {
             return 0;
         }
-        else if (algorithmChoice > 0 && algorithmChoice <= 3) // Replace 2 with the number of the last algorithm (check interface.hpp)
+        else if (algorithmChoice > 0 && algorithmChoice <= 3) // Replace 3 with the number of the last algorithm (check interface.hpp)
         {
             inputChoice = ui.chooseInputStyle();
             inputSize = ui.chooseInputSize();
             fileAddress = fm.generateFile((AlgorithmType)algorithmChoice, (InputType)inputChoice, inputSize);
             arr = fm.loadFile(fileAddress);
-            ui.runAlgorithm(arr, algorithmChoice, inputChoice, inputSize);
+            ui.runAlgorithm(arr, (AlgorithmType)algorithmChoice, (InputType)inputChoice, inputSize);
         }
         else
         {

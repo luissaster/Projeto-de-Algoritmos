@@ -47,9 +47,17 @@ public:
             saveInfo(arr, (AlgorithmType)algorithm, (InputType)inputStyle, inputSize, totalDuration);
             pauseConsole();
             break;
-        case Selection_Sort: // Selection sort
+        case Selection_Sort:
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.selectionSort(arr);
+            timeEnd = std::chrono::high_resolution_clock::now();
+            totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
+            saveInfo(arr, (AlgorithmType)algorithm, (InputType)inputStyle, inputSize, totalDuration);
+            pauseConsole();
+            break;
+        case Shell_Sort:
+            timeStart = std::chrono::high_resolution_clock::now();
+            algorithms.shellSort(arr);
             timeEnd = std::chrono::high_resolution_clock::now();
             totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
             saveInfo(arr, (AlgorithmType)algorithm, (InputType)inputStyle, inputSize, totalDuration);
@@ -85,9 +93,12 @@ public:
         int algorithmChoice;
         std::cout << std::endl
                   << "Escolha o algoritmo:" << std::endl
+                  << "----------Algoritmos de comparacao---------" << std::endl
                   << "1 - Insertion sort" << std::endl
                   << "2 - Bubble sort" << std::endl
                   << "3 - Selection sort" << std::endl
+                  << "4 - Shell sort" << std::endl
+                  << "---------Algoritmos de Divisao e Conquista---------" << std::endl
                   << "0 - Encerrar" << std::endl;
         std::cin >> algorithmChoice;
         clearConsole();

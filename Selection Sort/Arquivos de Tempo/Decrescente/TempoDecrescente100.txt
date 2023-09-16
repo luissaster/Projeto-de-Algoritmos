@@ -1,0 +1,3 @@
+Algorithm: Selection Sort
+Input: 100 random element(s) in descending order
+Time spent: 0 milliseconds.

@@ -26,6 +26,7 @@ enum AlgorithmType
     Insertion_Sort,
     Bubble_Sort,
     Selection_Sort,
+    Shell_Sort
 };
 enum InputType
 {
@@ -190,6 +191,9 @@ void FileManager::saveTime(AlgorithmType algorithm, InputType inputStyle, int in
     case Selection_Sort:
         file << "Selection Sort";
         break;
+    case Shell_Sort:
+        file << "Shell Sort";
+        break;
     default:
         std::cerr << "Algorithm doesn't exist in saveTime() function. Check fileManager.hpp." << std::endl;
         return;
@@ -234,6 +238,9 @@ std::string FileManager::generateFileAddress(AlgorithmType algorithm, InputType 
         break;
     case Selection_Sort:
         typeName = "Selection Sort";
+        break;
+    case Shell_Sort:
+        typeName = "Shell Sort";
         break;
     }
 

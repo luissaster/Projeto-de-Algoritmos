@@ -9,10 +9,12 @@ class Algorithms
 public:
     Algorithms();
     ~Algorithms();
-
+    // Comparision Algorithms
     void insertionSort(std::vector<int> &);
     void bubbleSort(std::vector<int> &);
     void selectionSort(std::vector<int> &);
+    void shellSort(std::vector<int> &);
+
 };
 
 Algorithms::Algorithms() {}
@@ -72,6 +74,23 @@ void Algorithms::selectionSort(std::vector<int> &arr)
             }
         }
         std::swap(arr[i], arr[minIndex]);
+    }
+}
+
+void Algorithms::shellSort(std::vector<int> &arr){
+    int n = arr.size();
+    for (int intervalo = n / 2; intervalo > 0; intervalo /= 2)
+    {
+        for (int i = intervalo; i < n; i++)
+        {
+            int temp = arr[i];
+            int j;
+            for (j = i; j >= intervalo && arr[j - intervalo] > temp; j -= intervalo)
+            {
+                arr[j] = arr[j - intervalo];
+            }
+            arr[j] = temp;
+        }
     }
 }
 #endif

@@ -1,0 +1,3 @@
+Algorithm: Bubble Sort
+Input: 100000 random element(s) in descending order
+Time spent: 57721 milliseconds.

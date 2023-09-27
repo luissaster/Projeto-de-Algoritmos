@@ -1,3 +1,3 @@
 Algorithm: Shell Sort
 Input: 1000000 random element(s) in descending order
-Time spent: 261 milliseconds.
+Time spent: 163 milliseconds.

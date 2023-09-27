@@ -18,9 +18,9 @@ public:
     void showTitle()
     {
         clearConsole();
-        std::cout << "|-------------------------------------------|" << std::endl
-                  << "|                ALGORITMOS                 |" << std::endl
-                  << "|-------------------------------------------|" << std::endl;
+        std::cout << "|-------------------------------------------|\n"
+                  << "|                ALGORITMOS                 |\n"
+                  << "|-------------------------------------------|\n";
     }
 
     void runAlgorithm(std::vector<int> &arr, AlgorithmType algorithm, InputType inputStyle, int inputSize)
@@ -34,54 +34,42 @@ public:
         case Insertion_Sort:
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.insertionSort(arr);
-            timeEnd = std::chrono::high_resolution_clock::now();
-            totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
-            saveInfo(arr, (AlgorithmType)algorithm, (InputType)inputStyle, inputSize, totalDuration);
-            pauseConsole();
             break;
         case Bubble_Sort:
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.bubbleSort(arr);
-            timeEnd = std::chrono::high_resolution_clock::now();
-            totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
-            saveInfo(arr, (AlgorithmType)algorithm, (InputType)inputStyle, inputSize, totalDuration);
-            pauseConsole();
             break;
         case Selection_Sort:
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.selectionSort(arr);
-            timeEnd = std::chrono::high_resolution_clock::now();
-            totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
-            saveInfo(arr, (AlgorithmType)algorithm, (InputType)inputStyle, inputSize, totalDuration);
-            pauseConsole();
             break;
         case Shell_Sort:
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.shellSort(arr);
-            timeEnd = std::chrono::high_resolution_clock::now();
-            totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
-            saveInfo(arr, (AlgorithmType)algorithm, (InputType)inputStyle, inputSize, totalDuration);
-            pauseConsole();
             break;
-
         default:
-            std::cout << "Opcao invalida." << std::endl;
-            break;
+            std::cout << "Invalid option." << std::endl;
+            return;
         }
+
+        timeEnd = std::chrono::high_resolution_clock::now();
+        totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
+        saveInfo(arr, algorithm, inputStyle, inputSize, totalDuration);
+        // pauseConsole();
     }
 
     void clearConsole()
     {
-#if defined(_WIN32) || defined(_WIN64)
-        system("cls");
+#ifdef _WIN32
+        std::system("cls");
 #else
-        system("clear");
+        std::system("clear");
 #endif
     }
 
     void pauseConsole()
     {
-#if defined(_WIN32) || defined(_WIN64)
+#ifdef _WIN32
         system("pause");
 #else
         system("read -p 'Press Enter to continue...' key");
@@ -92,14 +80,17 @@ public:
     {
         int algorithmChoice;
         std::cout << std::endl
-                  << "Escolha o algoritmo:" << std::endl
-                  << "----------Algoritmos de comparacao---------" << std::endl
+                  << "Choose an algorithm:" << std::endl
+                  << "----------Comparison Algorithms---------" << std::endl
                   << "1 - Insertion sort" << std::endl
                   << "2 - Bubble sort" << std::endl
                   << "3 - Selection sort" << std::endl
                   << "4 - Shell sort" << std::endl
-                  << "---------Algoritmos de Divisao e Conquista---------" << std::endl
-                  << "0 - Encerrar" << std::endl;
+                  << "---------Divide and Conquer Algorithms---------" << std::endl
+                  << "5 - Merge sort" << std::endl
+                  << "---------Options---------" << std::endl
+                  << "99 - Run all combinations" << std::endl
+                  << "0 - Quit" << std::endl;
         std::cin >> algorithmChoice;
         clearConsole();
         return (AlgorithmType)algorithmChoice;
@@ -108,10 +99,10 @@ public:
     InputType chooseInputStyle()
     {
         int inputChoice;
-        std::cout << "Escolha o tipo de entrada:" << std::endl
-                  << "1 - Aleatoria" << std::endl
-                  << "2 - Crescente" << std::endl
-                  << "3 - Decrescente" << std::endl;
+        std::cout << "Choose the input type:" << std::endl
+                  << "1 - Random" << std::endl
+                  << "2 - Ascending" << std::endl
+                  << "3 - Descending" << std::endl;
         std::cin >> inputChoice;
         clearConsole();
         return (InputType)inputChoice;
@@ -120,7 +111,7 @@ public:
     int chooseInputSize()
     {
         int sizeChoice;
-        std::cout << "Especifique o tamanho da entrada (10, 100, 1000, 10000, 100000, 1000000, ...):" << std::endl;
+        std::cout << "Specify the input size (10, 100, 1000, 10000, 100000, 1000000, ...): " << std::endl;
         std::cin >> sizeChoice;
         clearConsole();
         return sizeChoice;

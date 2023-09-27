@@ -5,31 +5,69 @@
 #include "fileManager.hpp"
 #include "algorithms.hpp"
 
+// Run all combinations, this function is just to make my life easier.
+void runAllCombinations()
+{
+    FileManager fileManager;
+    Interface userInterface;
+
+    AlgorithmType algorithms[] = {Insertion_Sort, Bubble_Sort, Selection_Sort, Shell_Sort};
+    InputType inputTypes[] = {Random, Crescente, Decrescente};
+    int inputSizes[] = {10, 100, 1000, 10000, 100000, 1000000};
+
+    for (AlgorithmType algorithm : algorithms)
+    {
+        for (InputType inputType : inputTypes)
+        {
+            for (int inputSize : inputSizes)
+            {
+                std::string inputFile = fileManager.generateFile(algorithm, inputType, inputSize);
+                std::vector<int> input = fileManager.loadFile(inputFile);
+                userInterface.runAlgorithm(input, algorithm, inputType, inputSize);
+            }
+        }
+    }
+}
+
 int main(void)
 {
-    Interface ui;
-    FileManager fm;
+    Interface userInterface;
+    FileManager fileManager;
     Algorithms algorithm;
+    AlgorithmType algorithmChoice;
+    InputType inputChoice;
     std::string fileAddress;
     std::vector<int> arr;
-    int algorithmChoice, inputChoice, inputSize;
+    int inputSize, aux;
 
     do
     {
-        ui.showTitle();
-        algorithmChoice = ui.chooseAlgorithm();
-        
+        userInterface.showTitle();
+        algorithmChoice = userInterface.chooseAlgorithm();
+
         if (algorithmChoice == 0) // End application
         {
             return 0;
         }
         else if (algorithmChoice > 0 && algorithmChoice <= 4) // Replace 4 with the number of the last algorithm (check interface.hpp)
         {
-            inputChoice = ui.chooseInputStyle();
-            inputSize = ui.chooseInputSize();
-            fileAddress = fm.generateFile((AlgorithmType)algorithmChoice, (InputType)inputChoice, inputSize);
-            arr = fm.loadFile(fileAddress);
-            ui.runAlgorithm(arr, (AlgorithmType)algorithmChoice, (InputType)inputChoice, inputSize);
+            inputChoice = userInterface.chooseInputStyle();
+            inputSize = userInterface.chooseInputSize();
+            fileAddress = fileManager.generateFile(algorithmChoice, inputChoice, inputSize);
+            arr = fileManager.loadFile(fileAddress);
+            userInterface.runAlgorithm(arr, algorithmChoice, inputChoice, inputSize);
+        }
+        else if (algorithmChoice == 99)
+        {
+            std::cout << "Running all combinations... Are you sure? 1 - Yes, 0 - No" << std::endl;
+            std::cin >> aux;
+            if (aux == 1)
+            {
+                runAllCombinations();
+            }else{
+                std::cout << "Exiting..." << std::endl;
+                algorithmChoice = userInterface.chooseAlgorithm();
+            }
         }
         else
         {
@@ -40,3 +78,4 @@ int main(void)
 
     return 0;
 }
+

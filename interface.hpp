@@ -18,9 +18,9 @@ public:
     void showTitle()
     {
         clearConsole();
-        std::cout << "|-------------------------------------------|\n"
-                  << "|                ALGORITMOS                 |\n"
-                  << "|-------------------------------------------|\n";
+        std::cout << "+-------------------------------------------+\n"
+                  << "|                ALGORITHMS                 |\n"
+                  << "+-------------------------------------------+\n";
     }
 
     void runAlgorithm(std::vector<int> &arr, AlgorithmType algorithm, InputType inputStyle, int inputSize)
@@ -47,6 +47,10 @@ public:
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.shellSort(arr);
             break;
+        case Merge_Sort:
+            timeStart = std::chrono::high_resolution_clock::now();
+            algorithms.mergeSort(arr, 0, arr.size());
+            break;
         default:
             std::cout << "Invalid option." << std::endl;
             return;
@@ -55,7 +59,7 @@ public:
         timeEnd = std::chrono::high_resolution_clock::now();
         totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
         saveInfo(arr, algorithm, inputStyle, inputSize, totalDuration);
-        // pauseConsole();
+        pauseConsole();
     }
 
     void clearConsole()
@@ -80,38 +84,58 @@ public:
     {
         int algorithmChoice;
         std::cout << std::endl
-                  << "Choose an algorithm:" << std::endl
-                  << "----------Comparison Algorithms---------" << std::endl
-                  << "1 - Insertion sort" << std::endl
-                  << "2 - Bubble sort" << std::endl
-                  << "3 - Selection sort" << std::endl
-                  << "4 - Shell sort" << std::endl
-                  << "---------Divide and Conquer Algorithms---------" << std::endl
-                  << "5 - Merge sort" << std::endl
-                  << "---------Options---------" << std::endl
-                  << "99 - Run all combinations" << std::endl
-                  << "0 - Quit" << std::endl;
+                  << "+----------Comparison Algorithms---------+" << std::endl
+                  << "|1 - Insertion sort                      |" << std::endl
+                  << "|2 - Bubble sort                         |" << std::endl
+                  << "|3 - Selection sort                      |" << std::endl
+                  << "|4 - Shell sort                          |" << std::endl
+                  << "+----------------------------------------+" << std::endl
+                  << std::endl
+                  << "+-----Divide and Conquer Algorithms------+" << std::endl
+                  << "|5 - Merge sort                          |" << std::endl
+                  << "+----------------------------------------+" << std::endl
+                  << std::endl
+                  << "+----------------Options-----------------+" << std::endl
+                  << "|99 - Run all combinations               |" << std::endl
+                  << "|0 - Quit                                |" << std::endl
+                  << "+----------------------------------------+" << std::endl
+                  << std::endl
+                  << "Choose an option -> ";
         std::cin >> algorithmChoice;
         clearConsole();
         return (AlgorithmType)algorithmChoice;
     }
 
-    InputType chooseInputStyle()
+    InputType chooseInputStyle(AlgorithmType algorithmChoice)
     {
         int inputChoice;
-        std::cout << "Choose the input type:" << std::endl
-                  << "1 - Random" << std::endl
-                  << "2 - Ascending" << std::endl
-                  << "3 - Descending" << std::endl;
+        std::cout << "+---------------------------------------------+\n"
+                  << "|                 INPUT STYLE                 |\n"
+                  << "+---------------------------------------------+\n"
+                  << "Selected algorithm: " << includedAlgorithms[algorithmChoice] << "." << std::endl
+                  << std::endl;
+        std::cout << "+-----------------Input styles----------------+" << std::endl
+                  << "|1 - Random                                   |" << std::endl
+                  << "|2 - Ascending                                |" << std::endl
+                  << "|3 - Descending                               |" << std::endl
+                  << "+---------------------------------------------+" << std::endl
+                  << std::endl
+                  << "Choose an option -> ";
         std::cin >> inputChoice;
         clearConsole();
         return (InputType)inputChoice;
     }
 
-    int chooseInputSize()
+    int chooseInputSize(AlgorithmType algorithmChoice, InputType inputStyle)
     {
         int sizeChoice;
-        std::cout << "Specify the input size (10, 100, 1000, 10000, 100000, 1000000, ...): " << std::endl;
+        std::cout << "+---------------------------------------------+\n"
+                  << "|                  INPUT SIZE                 |\n"
+                  << "+---------------------------------------------+\n"
+                  << "Selected algorithm: " << includedAlgorithms[algorithmChoice] << "." << std::endl
+                  << "Selected input style: " << includedInputStyles[inputStyle] << "." << std::endl
+                  << std::endl;
+        std::cout << "Specify the input size -> ";
         std::cin >> sizeChoice;
         clearConsole();
         return sizeChoice;

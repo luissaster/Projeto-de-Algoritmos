@@ -11,7 +11,7 @@ void runAllCombinations()
     FileManager fileManager;
     Interface userInterface;
 
-    AlgorithmType algorithms[] = {Insertion_Sort, Bubble_Sort, Selection_Sort, Shell_Sort};
+    AlgorithmType algorithms[] = {Insertion_Sort, Bubble_Sort, Selection_Sort, Shell_Sort, Merge_Sort};
     InputType inputTypes[] = {Random, Crescente, Decrescente};
     int inputSizes[] = {10, 100, 1000, 10000, 100000, 1000000};
 
@@ -49,10 +49,10 @@ int main(void)
         {
             return 0;
         }
-        else if (algorithmChoice > 0 && algorithmChoice <= 4) // Replace 4 with the number of the last algorithm (check interface.hpp)
+        else if (algorithmChoice > 0 && algorithmChoice <= includedAlgorithms.size())
         {
-            inputChoice = userInterface.chooseInputStyle();
-            inputSize = userInterface.chooseInputSize();
+            inputChoice = userInterface.chooseInputStyle(algorithmChoice);
+            inputSize = userInterface.chooseInputSize(algorithmChoice, inputChoice);
             fileAddress = fileManager.generateFile(algorithmChoice, inputChoice, inputSize);
             arr = fileManager.loadFile(fileAddress);
             userInterface.runAlgorithm(arr, algorithmChoice, inputChoice, inputSize);
@@ -64,18 +64,17 @@ int main(void)
             if (aux == 1)
             {
                 runAllCombinations();
-            }else{
+            }
+            else
+            {
                 std::cout << "Exiting..." << std::endl;
-                algorithmChoice = userInterface.chooseAlgorithm();
             }
         }
         else
         {
             std::cout << "Invalid choice." << std::endl;
         }
-
     } while (algorithmChoice != 0);
 
     return 0;
 }
-

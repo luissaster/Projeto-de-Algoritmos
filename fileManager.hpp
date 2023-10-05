@@ -13,41 +13,19 @@
 #include <algorithm>
 #include <filesystem>
 #include "interface.hpp"
-
-enum FileType
-{
-    Input,
-    Output,
-    Time
-};
-enum AlgorithmType
-{
-    Zero,
-    Insertion_Sort,
-    Bubble_Sort,
-    Selection_Sort,
-    Shell_Sort
-};
-enum InputType
-{
-    None,
-    Random,
-    Crescente,
-    Decrescente
-};
-
+#include "algorithms.hpp"
 class FileManager
 {
 public:
     FileManager();
     ~FileManager();
-
+    
+    std::string generateFileAddress(AlgorithmType algorithm, InputType input, int inputSize, FileType fileType);
     std::string generateFile(AlgorithmType algorithm, InputType inputStyle, int inputSize);
     std::vector<int> loadFile(const std::string &fileName);
     bool checkIfDirectoryExists(const std::string &address);
     void saveFile(const std::vector<int> &arr, AlgorithmType algorithm, InputType inputStyle, int inputSize);
     void saveTime(AlgorithmType algorithm, InputType inputStyle, int inputSize, std::chrono::milliseconds time);
-    std::string generateFileAddress(AlgorithmType algorithm, InputType input, int inputSize, FileType fileType);
 };
 
 FileManager::FileManager() {}
@@ -59,7 +37,7 @@ std::string FileManager::generateFile(AlgorithmType algorithm, InputType inputSt
     std::ofstream file(fileName);
     std::random_device rd;
     std::mt19937 generator(rd());
-    std::uniform_int_distribution<int> range(-1000000, 1000000);
+    std::uniform_int_distribution<int> range(0, 1000000);
 
     if (!file.is_open())
     {
@@ -73,14 +51,17 @@ std::string FileManager::generateFile(AlgorithmType algorithm, InputType inputSt
     switch (inputStyle)
     {
     case Random:
-        std::generate(arr.begin(), arr.end(), [&]() { return range(generator); });
+        std::generate(arr.begin(), arr.end(), [&]()
+                      { return range(generator); });
         break;
     case Crescente:
-        std::generate(arr.begin(), arr.end(), [&]() { return range(generator); });
+        std::generate(arr.begin(), arr.end(), [&]()
+                      { return range(generator); });
         std::sort(arr.begin(), arr.end());
         break;
     case Decrescente:
-        std::generate(arr.begin(), arr.end(), [&]() { return range(generator); });
+        std::generate(arr.begin(), arr.end(), [&]()
+                      { return range(generator); });
         std::sort(arr.begin(), arr.end(), std::greater<int>());
         break;
     }
@@ -169,24 +150,7 @@ void FileManager::saveTime(AlgorithmType algorithm, InputType inputStyle, int in
         throw std::runtime_error("Error opening the file -> " + fileName);
     }
 
-    std::string algorithmName;
-    switch (algorithm)
-    {
-    case Insertion_Sort:
-        algorithmName = "Insertion Sort";
-        break;
-    case Bubble_Sort:
-        algorithmName = "Bubble Sort";
-        break;
-    case Selection_Sort:
-        algorithmName = "Selection Sort";
-        break;
-    case Shell_Sort:
-        algorithmName = "Shell Sort";
-        break;
-    default:
-        throw std::runtime_error("Algorithm doesn't exist in saveTime() function. Check fileManager.hpp.");
-    }
+    std::string algorithmName = includedAlgorithms[algorithm];
 
     std::string inputStyleText;
     switch (inputStyle)
@@ -214,49 +178,34 @@ void FileManager::saveTime(AlgorithmType algorithm, InputType inputStyle, int in
 
 std::string FileManager::generateFileAddress(AlgorithmType algorithm, InputType input, int inputSize, FileType fileType)
 {
-    std::string algorithmName;
-    switch (algorithm)
-    {
-        case Insertion_Sort:
-            algorithmName = "Insertion Sort";
-            break;
-        case Bubble_Sort:
-            algorithmName = "Bubble Sort";
-            break;
-        case Selection_Sort:
-            algorithmName = "Selection Sort";
-            break;
-        case Shell_Sort:
-            algorithmName = "Shell Sort";
-            break;
-    }
+    std::string algorithmName = includedAlgorithms[algorithm];
 
     std::string inputName;
     switch (input)
     {
-        case Random:
-            inputName = "Random";
-            break;
-        case Crescente:
-            inputName = "Crescente";
-            break;
-        case Decrescente:
-            inputName = "Decrescente";
-            break;
+    case Random:
+        inputName = "Random";
+        break;
+    case Crescente:
+        inputName = "Crescente";
+        break;
+    case Decrescente:
+        inputName = "Decrescente";
+        break;
     }
 
     std::string fileTypeName;
     switch (fileType)
     {
-        case Input:
-            fileTypeName = "Arquivos de Entrada";
-            break;
-        case Output:
-            fileTypeName = "Arquivos de Saida";
-            break;
-        case Time:
-            fileTypeName = "Arquivos de Tempo";
-            break;
+    case Input:
+        fileTypeName = "Arquivos de Entrada";
+        break;
+    case Output:
+        fileTypeName = "Arquivos de Saida";
+        break;
+    case Time:
+        fileTypeName = "Arquivos de Tempo";
+        break;
     }
 
     std::string typeName = algorithmName + "/" + fileTypeName + "/" + inputName + "/";
@@ -267,15 +216,15 @@ std::string FileManager::generateFileAddress(AlgorithmType algorithm, InputType 
 
     switch (fileType)
     {
-        case Input:
-            fileTypeName = "Entrada";
-            break;
-        case Output:
-            fileTypeName = "Saida";
-            break;
-        case Time:
-            fileTypeName = "Tempo";
-            break;
+    case Input:
+        fileTypeName = "Entrada";
+        break;
+    case Output:
+        fileTypeName = "Saida";
+        break;
+    case Time:
+        fileTypeName = "Tempo";
+        break;
     }
 
     typeName += fileTypeName + inputName + std::to_string(inputSize) + ".txt";

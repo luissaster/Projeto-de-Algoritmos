@@ -11,7 +11,7 @@ void runAllCombinations()
     FileManager fileManager;
     Interface userInterface;
 
-    AlgorithmType algorithms[] = {Insertion_Sort, Bubble_Sort, Selection_Sort, Shell_Sort, Merge_Sort};
+    AlgorithmType algorithms[] = {Insertion_Sort, Bubble_Sort, Selection_Sort, Shell_Sort, Merge_Sort, Quick_Sort};
     InputType inputTypes[] = {Random, Crescente, Decrescente};
     int inputSizes[] = {10, 100, 1000, 10000, 100000, 1000000};
 

@@ -51,6 +51,10 @@ public:
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.mergeSort(arr, 0, arr.size());
             break;
+        case Quick_Sort:
+            timeStart = std::chrono::high_resolution_clock::now();
+            algorithms.quickSort(arr, 0, arr.size());
+            break;
         default:
             std::cout << "Invalid option." << std::endl;
             return;
@@ -93,6 +97,7 @@ public:
                   << std::endl
                   << "+-----Divide and Conquer Algorithms------+" << std::endl
                   << "|5 - Merge sort                          |" << std::endl
+                  << "|6 - Quick sort                          |" << std::endl
                   << "+----------------------------------------+" << std::endl
                   << std::endl
                   << "+----------------Options-----------------+" << std::endl

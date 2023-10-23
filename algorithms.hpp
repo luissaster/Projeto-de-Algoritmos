@@ -13,7 +13,7 @@
 //
 
 // These are used for printing the selected algorithm in chooseInputStyle and chooseInputSize
-std::vector<std::string> includedAlgorithms = {"Zero", "Insertion Sort", "Bubble Sort", "Selection Sort", "Shell Sort", "Merge Sort"};
+std::vector<std::string> includedAlgorithms = {"Zero", "Insertion Sort", "Bubble Sort", "Selection Sort", "Shell Sort", "Merge Sort", "Quick Sort"};
 std::vector<std::string> includedInputStyles = {"None", "Random", "Ascending", "Descending"};
 
 enum AlgorithmType
@@ -23,7 +23,8 @@ enum AlgorithmType
     Bubble_Sort,
     Selection_Sort,
     Shell_Sort,
-    Merge_Sort
+    Merge_Sort,
+    Quick_Sort
 };
 
 enum InputType
@@ -54,8 +55,10 @@ public:
     void shellSort(std::vector<int> &);
 
     // Divide and conquer algorithms
-    void merge(std::vector<int> &, int s, int m, int e);
-    void mergeSort(std::vector<int> &, int s, int e);
+    void merge(std::vector<int> &, int, int, int);
+    void mergeSort(std::vector<int> &, int, int);
+    void quickSort(std::vector<int> &, int, int);
+    int partition(std::vector<int> &, int, int);
 };
 
 Algorithms::Algorithms() {}
@@ -141,53 +144,78 @@ void Algorithms::shellSort(std::vector<int> &arr)
     }
 }
 
-void Algorithms::merge(std::vector<int> &v, int s, int m, int e)
+void Algorithms::merge(std::vector<int> &arr, int start, int middle, int end)
 {
-    std::vector<int> temp;
+    std::vector<int> sortedArr;
 
-    int i, j;
-    i = s;
-    j = m + 1;
+    int i = start;
+    int j = middle + 1;
 
-    while (i <= m && j <= e)
+    while (i <= middle && j <= end)
     {
-
-        if (v[i] <= v[j])
+        if (arr[i] <= arr[j])
         {
-            temp.push_back(v[i]);
+            sortedArr.push_back(arr[i]);
             ++i;
         }
         else
         {
-            temp.push_back(v[j]);
+            sortedArr.push_back(arr[j]);
             ++j;
         }
     }
 
-    while (i <= m)
+    while (i <= middle)
     {
-        temp.push_back(v[i]);
+        sortedArr.push_back(arr[i]);
         ++i;
     }
 
-    while (j <= e)
+    while (j <= end)
     {
-        temp.push_back(v[j]);
+        sortedArr.push_back(arr[j]);
         ++j;
     }
 
-    for (int i = s; i <= e; ++i)
-        v[i] = temp[i - s];
+    for (int k = start; k <= end; ++k)
+        arr[k] = sortedArr[k - start];
 }
 
-void Algorithms::mergeSort(std::vector<int> &v, int s, int e)
+void Algorithms::mergeSort(std::vector<int> &arr, int start, int end)
 {
-    if (s < e)
+    if (start < end)
     {
-        int m = (s + e) / 2;
-        mergeSort(v, s, m);
-        mergeSort(v, m + 1, e);
-        merge(v, s, m, e);
+        int mid = (start + end) / 2;
+        mergeSort(arr, start, mid);
+        mergeSort(arr, mid + 1, end);
+        merge(arr, start, mid, end);
     }
+}
+
+void Algorithms::quickSort(std::vector<int> &arr, int low, int high)
+{
+    if (low < high)
+    {
+        int pivotIndex = partition(arr, low, high);
+        quickSort(arr, low, pivotIndex - 1);
+        quickSort(arr, pivotIndex + 1, high);
+    }
+}
+
+int Algorithms::partition(std::vector<int> &arr, int low, int high){
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++)
+    {
+        if (arr[j] < pivot)
+        {
+            i++;
+            std::swap(arr[i], arr[j]);
+        }
+    }
+
+    std::swap(arr[i + 1], arr[high]);
+    return i + 1;
 }
 #endif

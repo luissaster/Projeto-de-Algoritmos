@@ -1,0 +1,3 @@
+Algorithm: Quick Sort(Average)
+Input: 100 random element(s)
+Time spent: 0 milliseconds.

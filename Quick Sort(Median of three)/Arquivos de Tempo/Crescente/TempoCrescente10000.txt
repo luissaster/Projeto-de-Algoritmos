@@ -1,0 +1,3 @@
+Algorithm: Quick Sort(Median of three)
+Input: 10000 random element(s) in ascending order
+Time spent: 52 milliseconds.

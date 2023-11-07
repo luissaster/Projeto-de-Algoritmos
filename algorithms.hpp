@@ -13,7 +13,7 @@
 //
 
 // These are used for printing the selected algorithm in chooseInputStyle and chooseInputSize
-std::vector<std::string> includedAlgorithms = {"Zero", "Insertion Sort", "Bubble Sort", "Selection Sort", "Shell Sort", "Merge Sort"};
+std::vector<std::string> includedAlgorithms = {"Zero", "Insertion Sort", "Bubble Sort", "Selection Sort", "Shell Sort", "Merge Sort", "Quick Sort(First)", "Quick Sort(Average)", "Quick Sort(Median of three)", "Quick Sort(Random)"};
 std::vector<std::string> includedInputStyles = {"None", "Random", "Ascending", "Descending"};
 
 enum AlgorithmType
@@ -23,7 +23,11 @@ enum AlgorithmType
     Bubble_Sort,
     Selection_Sort,
     Shell_Sort,
-    Merge_Sort
+    Merge_Sort,
+    Quick_Sort_First,
+    Quick_Sort_Average,
+    Quick_Sort_Median,
+    Quick_Sort_Random
 };
 
 enum InputType
@@ -41,6 +45,14 @@ enum FileType
     Time
 };
 
+enum PivotType // used in quick sort
+{
+    First,
+    Average,
+    MedianOfThree,
+    RandomPivot
+};
+
 class Algorithms
 {
 public:
@@ -56,15 +68,8 @@ public:
     // Divide and conquer algorithms
     void merge(std::vector<int> &, int, int, int);
     void mergeSort(std::vector<int> &, int, int);
-
-    void quickSort_First(std::vector<int> &, int, int);
-    void quickSort_Average(std::vector<int> &, int, int);
-    void quickSort_MedianOfThree(std::vector<int> &, int, int);
-    void quickSort_Random(std::vector<int> &, int, int);
-    int partitionFirst(std::vector<int> &, int, int);
-    int partitionAverage(std::vector<int> &, int, int);
-    int partitionMedianOfThree(std::vector<int> &, int, int);
-    int partitionRandom(std::vector<int> &, int, int);
+    void quickSort(std::vector<int> &, int, int, PivotType);
+    int partition(std::vector<int> &, int, int, PivotType);
 };
 
 Algorithms::Algorithms() {}
@@ -198,4 +203,60 @@ void Algorithms::mergeSort(std::vector<int> &arr, int start, int end)
     }
 }
 
+int Algorithms::partition(std::vector<int> &arr, int low, int high, PivotType pivotType)
+{
+    int pivotIndex, mid;
+    switch (pivotType)
+    {
+    case First:
+        pivotIndex = low;
+        break;
+    case Average:
+        pivotIndex = (low + high) / 2;
+        break;
+    case MedianOfThree:
+        mid = (low + high) / 2;
+        if (arr[low] > arr[high])
+            std::swap(arr[low], arr[high]);
+        if (arr[mid] > arr[high])
+            std::swap(arr[mid], arr[high]);
+        if (arr[low] > arr[mid])
+            std::swap(arr[low], arr[mid]);
+        pivotIndex = mid;
+        break;
+    case RandomPivot:
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<int> dis(low, high);
+        pivotIndex = dis(gen);
+        break;
+    }
+
+    int pivot = arr[pivotIndex];
+    int i = low - 1;
+
+    std::swap(arr[pivotIndex], arr[high]);
+
+    for (int j = low; j < high; j++)
+    {
+        if (arr[j] < pivot)
+        {
+            i++;
+            std::swap(arr[i], arr[j]);
+        }
+    }
+
+    std::swap(arr[i + 1], arr[high]);
+    return i + 1;
+}
+
+void Algorithms::quickSort(std::vector<int> &arr, int low, int high, PivotType pivotType)
+{
+    if (low < high)
+    {
+        int pivotIndex = partition(arr, low, high, pivotType);
+        quickSort(arr, low, pivotIndex - 1, pivotType);
+        quickSort(arr, pivotIndex + 1, high, pivotType);
+    }
+}
 #endif

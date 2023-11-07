@@ -6,12 +6,16 @@
 #include "algorithms.hpp"
 
 // Run all combinations, this function is just to make my life easier.
+// Quick Sort (First) parou de rodar no crescente e decrescente de 100000
+// Quick Sort (Average) rodou em todos os casos sem problemas
+// Quick Sort (Median of Three) parou de rodar no crescente de 100000
+// Quick Sort (Random) rodou em todos os casos sem problemas
 void runAllCombinations()
 {
     FileManager fileManager;
     Interface userInterface;
 
-    AlgorithmType algorithms[] = {};
+    AlgorithmType algorithms[] = {Quick_Sort_First, Quick_Sort_Average, Quick_Sort_Median, Quick_Sort_Random};
     InputType inputTypes[] = {Random, Crescente, Decrescente};
     int inputSizes[] = {10, 100, 1000, 10000, 100000, 1000000};
 

@@ -51,6 +51,22 @@ public:
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.mergeSort(arr, 0, arr.size());
             break;
+        case Quick_Sort_First:
+            timeStart = std::chrono::high_resolution_clock::now();
+            algorithms.quickSort(arr, 0, arr.size(), PivotType::First);
+            break;
+        case Quick_Sort_Average:
+            timeStart = std::chrono::high_resolution_clock::now();
+            algorithms.quickSort(arr, 0, arr.size(), PivotType::Average);
+            break;
+        case Quick_Sort_Median:
+            timeStart = std::chrono::high_resolution_clock::now();
+            algorithms.quickSort(arr, 0, arr.size(), PivotType::MedianOfThree);
+            break;
+        case Quick_Sort_Random:
+            timeStart = std::chrono::high_resolution_clock::now();
+            algorithms.quickSort(arr, 0, arr.size(), PivotType::RandomPivot);
+            break;
         default:
             std::cout << "Invalid option." << std::endl;
             return;
@@ -59,7 +75,7 @@ public:
         timeEnd = std::chrono::high_resolution_clock::now();
         totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
         saveInfo(arr, algorithm, inputStyle, inputSize, totalDuration);
-        //pauseConsole();
+        // pauseConsole();
     }
 
     void clearConsole()

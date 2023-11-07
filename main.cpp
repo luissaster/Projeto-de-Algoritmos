@@ -5,6 +5,10 @@
 #include "fileManager.hpp"
 #include "algorithms.hpp"
 
+FileManager fileManager;
+Interface userInterface;
+Algorithms algorithm;
+
 // Run all combinations, this function is just to make my life easier.
 // Quick Sort (First) parou de rodar no crescente e decrescente de 100000
 // Quick Sort (Average) rodou em todos os casos sem problemas
@@ -12,8 +16,6 @@
 // Quick Sort (Random) rodou em todos os casos sem problemas
 void runAllCombinations()
 {
-    FileManager fileManager;
-    Interface userInterface;
 
     AlgorithmType algorithms[] = {Quick_Sort_First, Quick_Sort_Average, Quick_Sort_Median, Quick_Sort_Random};
     InputType inputTypes[] = {Random, Crescente, Decrescente};
@@ -35,9 +37,6 @@ void runAllCombinations()
 
 int main(void)
 {
-    Interface userInterface;
-    FileManager fileManager;
-    Algorithms algorithm;
     AlgorithmType algorithmChoice;
     InputType inputChoice;
     std::string fileAddress;

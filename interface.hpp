@@ -75,7 +75,7 @@ public:
         timeEnd = std::chrono::high_resolution_clock::now();
         totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
         saveInfo(arr, algorithm, inputStyle, inputSize, totalDuration);
-        // pauseConsole();
+        pauseConsole();
     }
 
     void clearConsole()

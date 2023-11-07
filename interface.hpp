@@ -51,10 +51,6 @@ public:
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.mergeSort(arr, 0, arr.size());
             break;
-        case Quick_Sort:
-            timeStart = std::chrono::high_resolution_clock::now();
-            algorithms.quickSort(arr, 0, arr.size());
-            break;
         default:
             std::cout << "Invalid option." << std::endl;
             return;
@@ -63,7 +59,7 @@ public:
         timeEnd = std::chrono::high_resolution_clock::now();
         totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
         saveInfo(arr, algorithm, inputStyle, inputSize, totalDuration);
-        pauseConsole();
+        //pauseConsole();
     }
 
     void clearConsole()
@@ -97,7 +93,10 @@ public:
                   << std::endl
                   << "+-----Divide and Conquer Algorithms------+" << std::endl
                   << "|5 - Merge sort                          |" << std::endl
-                  << "|6 - Quick sort                          |" << std::endl
+                  << "|6 - Quick sort(First element as pivot)  |" << std::endl
+                  << "|7 - Quick sort(Average element as pivot)|" << std::endl
+                  << "|8 - Quick sort(Median of three as pivot)|" << std::endl
+                  << "|9 - Quick sort(Random element as pivot) |" << std::endl
                   << "+----------------------------------------+" << std::endl
                   << std::endl
                   << "+----------------Options-----------------+" << std::endl

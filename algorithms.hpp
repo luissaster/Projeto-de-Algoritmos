@@ -13,7 +13,7 @@
 //
 
 // These are used for printing the selected algorithm in chooseInputStyle and chooseInputSize
-std::vector<std::string> includedAlgorithms = {"Zero", "Insertion Sort", "Bubble Sort", "Selection Sort", "Shell Sort", "Merge Sort", "Quick Sort"};
+std::vector<std::string> includedAlgorithms = {"Zero", "Insertion Sort", "Bubble Sort", "Selection Sort", "Shell Sort", "Merge Sort"};
 std::vector<std::string> includedInputStyles = {"None", "Random", "Ascending", "Descending"};
 
 enum AlgorithmType
@@ -23,8 +23,7 @@ enum AlgorithmType
     Bubble_Sort,
     Selection_Sort,
     Shell_Sort,
-    Merge_Sort,
-    Quick_Sort
+    Merge_Sort
 };
 
 enum InputType
@@ -57,8 +56,15 @@ public:
     // Divide and conquer algorithms
     void merge(std::vector<int> &, int, int, int);
     void mergeSort(std::vector<int> &, int, int);
-    void quickSort(std::vector<int> &, int, int);
-    int partition(std::vector<int> &, int, int);
+
+    void quickSort_First(std::vector<int> &, int, int);
+    void quickSort_Average(std::vector<int> &, int, int);
+    void quickSort_MedianOfThree(std::vector<int> &, int, int);
+    void quickSort_Random(std::vector<int> &, int, int);
+    int partitionFirst(std::vector<int> &, int, int);
+    int partitionAverage(std::vector<int> &, int, int);
+    int partitionMedianOfThree(std::vector<int> &, int, int);
+    int partitionRandom(std::vector<int> &, int, int);
 };
 
 Algorithms::Algorithms() {}
@@ -192,30 +198,4 @@ void Algorithms::mergeSort(std::vector<int> &arr, int start, int end)
     }
 }
 
-void Algorithms::quickSort(std::vector<int> &arr, int low, int high)
-{
-    if (low < high)
-    {
-        int pivotIndex = partition(arr, low, high);
-        quickSort(arr, low, pivotIndex - 1);
-        quickSort(arr, pivotIndex + 1, high);
-    }
-}
-
-int Algorithms::partition(std::vector<int> &arr, int low, int high){
-    int pivot = arr[high];
-    int i = low - 1;
-
-    for (int j = low; j < high; j++)
-    {
-        if (arr[j] < pivot)
-        {
-            i++;
-            std::swap(arr[i], arr[j]);
-        }
-    }
-
-    std::swap(arr[i + 1], arr[high]);
-    return i + 1;
-}
 #endif

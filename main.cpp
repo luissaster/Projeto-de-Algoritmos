@@ -9,16 +9,19 @@ FileManager fileManager;
 Interface userInterface;
 Algorithms algorithm;
 
-// Run all combinations, this function is just to make my life easier.
+// QUICK SORT
 // Quick Sort (First) parou de rodar no crescente e decrescente de 100000
-// Quick Sort (Average) rodou em todos os casos sem problemas
-// Quick Sort (Median of Three) rodou em todos os casos sem problemas
-// Quick Sort (Random) rodou em todos os casos sem problemas
+// Rodou no Code::Blocks, aumentando o tamanho da pilha
+// settings > compiler > linker settings > other linker options >  -Wl,--stack=268435456
+// Quick Sort (Average), (Median of Three), (Random) rodaram em todos os casos sem problemas
+//
+
+// Run all combinations, this function is just to make my life easier.
 void runAllCombinations()
 {
 
-    AlgorithmType algorithms[] = {Quick_Sort_Random};
-    InputType inputTypes[] = {Random, Crescente, Decrescente};
+    AlgorithmType algorithms[] = {Quick_Sort_First};
+    InputType inputTypes[] = {Crescente, Decrescente};
     int inputSizes[] = {10, 100, 1000, 10000, 100000, 1000000};
 
     for (AlgorithmType algorithm : algorithms)

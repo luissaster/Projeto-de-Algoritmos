@@ -1,3 +1,3 @@
 Algorithm: Quick Sort(Random)
 Input: 1000000 random element(s) in descending order
-Time spent: 7067 milliseconds.
+Time spent: 7179 milliseconds.

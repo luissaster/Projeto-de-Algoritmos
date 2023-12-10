@@ -8,6 +8,9 @@
 FileManager fileManager;
 Interface userInterface;
 Algorithms algorithm;
+AlgorithmType algorithmChoice;
+InputType inputChoice;
+std::vector<int> testArr = {7, 8, 12, 2, 1, 5, 10, 3, 6, 4};
 
 // QUICK SORT
 // Quick Sort (First) parou de rodar no crescente e decrescente de 100000
@@ -20,8 +23,8 @@ Algorithms algorithm;
 void runAllCombinations()
 {
 
-    AlgorithmType algorithms[] = {Quick_Sort_First};
-    InputType inputTypes[] = {Crescente, Decrescente};
+    AlgorithmType algorithms[] = {Heap_Sort};
+    InputType inputTypes[] = {Crescente, Decrescente, Random};
     int inputSizes[] = {10, 100, 1000, 10000, 100000, 1000000};
 
     for (AlgorithmType algorithm : algorithms)
@@ -38,13 +41,19 @@ void runAllCombinations()
     }
 }
 
+void printVector(std::vector<int> &arr)
+{
+    for (int num : arr)
+    {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+}
 int main(void)
 {
-    AlgorithmType algorithmChoice;
-    InputType inputChoice;
     std::string fileAddress;
     std::vector<int> arr;
-    int inputSize, aux;
+    int inputSize, aux, heapMin;
 
     do
     {
@@ -55,13 +64,80 @@ int main(void)
         {
             return 0;
         }
-        else if (algorithmChoice > 0 && algorithmChoice <= includedAlgorithms.size())
+        else if (algorithmChoice > 0 && algorithmChoice < includedAlgorithms.size())
         {
             inputChoice = userInterface.chooseInputStyle(algorithmChoice);
             inputSize = userInterface.chooseInputSize(algorithmChoice, inputChoice);
             fileAddress = fileManager.generateFile(algorithmChoice, inputChoice, inputSize);
             arr = fileManager.loadFile(fileAddress);
             userInterface.runAlgorithm(arr, algorithmChoice, inputChoice, inputSize);
+        }
+        else if (algorithmChoice > 10 && algorithmChoice < 15)
+        { // Heap Sort extras
+            switch (algorithmChoice)
+            {
+            case 11: // Heap minimum
+                std::cout << "+-------------------------------+" << std::endl
+                          << "|     Heap antes da ordenacao   |" << std::endl
+                          << "+-------------------------------+" << std::endl;
+                printVector(testArr);
+                algorithm.heapSort(testArr);
+                heapMin = algorithm.heapMinimum(testArr);
+                std::cout << "+-------------------------------+" << std::endl
+                          << "|     Heap depois da ordenacao  |" << std::endl
+                          << "+-------------------------------+" << std::endl;
+                printVector(testArr);
+                std::cout << "+-------------------------------+" << std::endl
+                          << "|         Elemento minimo       |" << std::endl
+                          << "+-------------------------------+" << std::endl
+                          << heapMin << std::endl;
+                userInterface.pauseConsole();
+                break;
+            case 12: // Heap extract min
+                std::cout << "+-------------------------------+" << std::endl
+                          << "|     Heap antes da ordenacao   |" << std::endl
+                          << "+-------------------------------+" << std::endl;
+                printVector(testArr);
+                algorithm.heapSort(testArr);
+                heapMin = algorithm.heapExtractMin(testArr);
+                std::cout << "+-------------------------------+" << std::endl
+                          << "|     Heap depois da ordenacao  |" << std::endl
+                          << "+-------------------------------+" << std::endl;
+                algorithm.heapSort(testArr);
+                printVector(testArr);
+                std::cout << "+-------------------------------+" << std::endl
+                          << "|         Elemento minimo       |" << std::endl
+                          << "+-------------------------------+" << std::endl
+                          << heapMin << std::endl;
+                userInterface.pauseConsole();
+                break;
+            case 13: // Heap increase key
+                std::cout << "+-------------------------------+" << std::endl
+                          << "|     Heap antes da ordenacao   |" << std::endl
+                          << "+-------------------------------+" << std::endl;
+                printVector(testArr);
+                algorithm.heapIncreaseKey(testArr, 2, 8);
+                algorithm.heapSort(testArr);
+                std::cout << "+-------------------------------+" << std::endl
+                          << "|     Heap depois da ordenacao  |" << std::endl
+                          << "+-------------------------------+" << std::endl;
+                printVector(testArr);
+                userInterface.pauseConsole();
+                break;
+            case 14: // Heap insert
+                std::cout << "+-------------------------------+" << std::endl
+                          << "|     Heap antes da ordenacao   |" << std::endl
+                          << "+-------------------------------+" << std::endl;
+                printVector(testArr);
+                algorithm.heapInsert(testArr, 9);
+                algorithm.heapSort(testArr);
+                std::cout << "+-------------------------------+" << std::endl
+                          << "|     Heap depois da ordenacao  |" << std::endl
+                          << "+-------------------------------+" << std::endl;
+                printVector(testArr);
+                userInterface.pauseConsole();
+                break;
+            }
         }
         else if (algorithmChoice == 99)
         {

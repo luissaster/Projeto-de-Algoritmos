@@ -13,7 +13,9 @@
 //
 
 // These are used for printing the selected algorithm in chooseInputStyle and chooseInputSize
-std::vector<std::string> includedAlgorithms = {"Zero", "Insertion Sort", "Bubble Sort", "Selection Sort", "Shell Sort", "Merge Sort", "Quick Sort(First)", "Quick Sort(Average)", "Quick Sort(Median of three)", "Quick Sort(Random)"};
+std::vector<std::string> includedAlgorithms = {"Zero", "Insertion Sort", "Bubble Sort", "Selection Sort",
+                                               "Shell Sort", "Merge Sort", "Quick Sort(First)", "Quick Sort(Average)",
+                                               "Quick Sort(Median of three)", "Quick Sort(Random)", "Heap Sort (min heap)"};
 std::vector<std::string> includedInputStyles = {"None", "Random", "Ascending", "Descending"};
 
 enum AlgorithmType
@@ -27,7 +29,8 @@ enum AlgorithmType
     Quick_Sort_First,
     Quick_Sort_Average,
     Quick_Sort_Median,
-    Quick_Sort_Random
+    Quick_Sort_Random,
+    Heap_Sort
 };
 
 enum InputType
@@ -70,6 +73,17 @@ public:
     void mergeSort(std::vector<int> &, int, int);
     void quickSort(std::vector<int> &, int, int, PivotType);
     int partition(std::vector<int> &, int, int, PivotType);
+
+    // Heap Sort
+    void minHeapify(std::vector<int> &, int, int);
+    void buildMinHeap(std::vector<int> &);
+    void heapSort(std::vector<int> &);
+
+    // Heap Sort extras
+    int heapMinimum(std::vector<int> &);
+    int heapExtractMin(std::vector<int> &);
+    void heapIncreaseKey(std::vector<int> &, int value, int position);
+    void heapInsert(std::vector<int> &, int value);
 };
 
 Algorithms::Algorithms() {}
@@ -258,5 +272,72 @@ void Algorithms::quickSort(std::vector<int> &arr, int low, int high, PivotType p
         quickSort(arr, low, pivotIndex - 1, pivotType);
         quickSort(arr, pivotIndex + 1, high, pivotType);
     }
+}
+
+void Algorithms::minHeapify(std::vector<int> &heap, int i, int heap_size)
+{
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+    int smallest = i;
+
+    if (left < heap_size && heap[left] > heap[smallest])
+        smallest = left;
+    if (right < heap_size && heap[right] > heap[smallest])
+        smallest = right;
+    if (smallest != i)
+    {
+        std::swap(heap[i], heap[smallest]);
+        minHeapify(heap, smallest, heap_size);
+    }
+}
+void Algorithms::buildMinHeap(std::vector<int> &heap)
+{
+    int heap_size = heap.size();
+    for (int i = (heap_size / 2) - 1; i >= 0; --i)
+    {
+        minHeapify(heap, i, heap_size);
+    }
+}
+
+void Algorithms::heapSort(std::vector<int> &arr)
+{
+    int heap_size = arr.size();
+    buildMinHeap(arr);
+    for (int i = heap_size - 1; i > 0; --i)
+    {
+        std::swap(arr[0], arr[i]);
+        minHeapify(arr, 0, i);
+    }
+}
+
+int Algorithms::heapMinimum(std::vector<int> &heap)
+{
+    return heap[0];
+}
+
+int Algorithms::heapExtractMin(std::vector<int> &heap)
+{
+    int min = heap[0];
+    heap[0] = heap[heap.size() - 1];
+    heap.pop_back();
+    minHeapify(heap, 0, heap.size());
+    return min;
+}
+
+void Algorithms::heapIncreaseKey(std::vector<int> &heap, int value, int position)
+{
+    heap[position] = value;
+    while (position > 0 && heap[(position - 1) / 2] > heap[position])
+    {
+        std::swap(heap[position], heap[(position - 1) / 2]);
+        position = (position - 1) / 2;
+    }
+}
+
+void Algorithms::heapInsert(std::vector<int> &heap, int value)
+{
+    minHeapify(heap, 0, heap.size());
+    heap.push_back(value);
+    heapIncreaseKey(heap, value, heap.size() - 1);
 }
 #endif

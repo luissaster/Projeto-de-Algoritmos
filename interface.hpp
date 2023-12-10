@@ -67,6 +67,24 @@ public:
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.quickSort(arr, 0, arr.size() - 1, PivotType::RandomPivot);
             break;
+        case Heap_Sort:
+            /*std::cout << "Heap antes da ordenacao." << std::endl;
+            for (int num : arr)
+            {
+                std::cout << num << " ";
+            }*/
+
+            timeStart = std::chrono::high_resolution_clock::now();
+            algorithms.heapSort(arr);
+
+            /*std::cout << std::endl
+                      << "Heap depois da ordenacao." << std::endl;
+            for (int num : arr)
+            {
+                std::cout << num << " ";
+            }
+            std::cout << std::endl;*/
+            break;
         default:
             std::cout << "Invalid option." << std::endl;
             return;
@@ -75,7 +93,7 @@ public:
         timeEnd = std::chrono::high_resolution_clock::now();
         totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart);
         saveInfo(arr, algorithm, inputStyle, inputSize, totalDuration);
-        //pauseConsole();
+        pauseConsole();
     }
 
     void clearConsole()
@@ -113,6 +131,14 @@ public:
                   << "|7 - Quick sort(Average element as pivot)|" << std::endl
                   << "|8 - Quick sort(Median of three as pivot)|" << std::endl
                   << "|9 - Quick sort(Random element as pivot) |" << std::endl
+                  << "|10 - Heap sort(min heap)                |" << std::endl
+                  << "+----------------------------------------+" << std::endl
+                  << std::endl
+                  << "+-------Extras(Heap Sort related)--------+" << std::endl
+                  << "|11 - Heap minimum (returns heap's root) |" << std::endl
+                  << "|12 - Heap extract min (removes root)    |" << std::endl
+                  << "|13 - Heap increase key                  |" << std::endl
+                  << "|14 - Heap insert                        |" << std::endl
                   << "+----------------------------------------+" << std::endl
                   << std::endl
                   << "+----------------Options-----------------+" << std::endl

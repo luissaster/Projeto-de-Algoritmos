@@ -280,9 +280,9 @@ void Algorithms::minHeapify(std::vector<int> &heap, int i, int heap_size)
     int right = 2 * i + 2;
     int smallest = i;
 
-    if (left < heap_size && heap[left] > heap[smallest])
+    if (left < heap_size && heap[left] < heap[smallest])
         smallest = left;
-    if (right < heap_size && heap[right] > heap[smallest])
+    if (right < heap_size && heap[right] < heap[smallest])
         smallest = right;
     if (smallest != i)
     {

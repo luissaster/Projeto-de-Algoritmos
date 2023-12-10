@@ -1,3 +1,10 @@
+//
+// Projeto desenvolvido durante a disciplina SIN213 - PROJETO DE ALGORITMOS
+// na Universidade Federal de Viçosa - Campus Rio Paranaíba
+// por Luís Fernando Almeida - luis.almeida1@ufv.br
+// https://github.com/luissaster/projeto-de-algoritmos
+//
+
 #include <iostream>
 #include <string>
 #include <chrono>

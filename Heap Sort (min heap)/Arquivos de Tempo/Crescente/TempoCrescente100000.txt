@@ -1,3 +1,3 @@
 Algorithm: Heap Sort (min heap)
 Input: 100000 random element(s) in ascending order
-Time spent: 36 milliseconds.
+Time spent: 35 milliseconds.

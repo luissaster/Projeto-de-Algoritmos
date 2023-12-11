@@ -326,6 +326,12 @@ int Algorithms::heapExtractMin(std::vector<int> &heap)
 
 void Algorithms::heapIncreaseKey(std::vector<int> &heap, int value, int position)
 {
+    if (position > heap.size())
+    {
+        std::cout << "Position out of range" << std::endl;
+        system("pause");
+        return;
+    }
     heap[position] = value;
     while (position > 0 && heap[(position - 1) / 2] > heap[position])
     {
@@ -336,8 +342,9 @@ void Algorithms::heapIncreaseKey(std::vector<int> &heap, int value, int position
 
 void Algorithms::heapInsert(std::vector<int> &heap, int value)
 {
-    minHeapify(heap, 0, heap.size());
+    buildMinHeap(heap);
     heap.push_back(value);
-    heapIncreaseKey(heap, value, heap.size() - 1);
+    int position = heap.size() - 1;
+    heapIncreaseKey(heap, value, position);
 }
 #endif

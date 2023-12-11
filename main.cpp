@@ -135,7 +135,7 @@ int main(void)
                           << "+-------------------------------+" << std::endl;
                 printVector(testArr);
                 algorithm.buildMinHeap(testArr);
-                algorithm.heapInsert(testArr, 9);
+                algorithm.heapInsert(testArr, 10);
                 std::cout << "+-------------------------------+" << std::endl
                           << "|     Heap depois da ordenacao  |" << std::endl
                           << "+-------------------------------+" << std::endl;

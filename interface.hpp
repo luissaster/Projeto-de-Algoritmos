@@ -68,22 +68,8 @@ public:
             algorithms.quickSort(arr, 0, arr.size() - 1, PivotType::RandomPivot);
             break;
         case Heap_Sort:
-            std::cout << "Heap antes da ordenacao." << std::endl;
-            for (int num : arr)
-            {
-                std::cout << num << " ";
-            }
-
             timeStart = std::chrono::high_resolution_clock::now();
             algorithms.heapSort(arr);
-
-            std::cout << std::endl
-                      << "Heap depois da ordenacao." << std::endl;
-            for (int num : arr)
-            {
-                std::cout << num << " ";
-            }
-            std::cout << std::endl;
             break;
         default:
             std::cout << "Invalid option." << std::endl;

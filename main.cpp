@@ -29,7 +29,6 @@ std::vector<int> testArr = {7, 8, 12, 2, 1, 5, 10, 3, 6, 4};
 // Run all combinations, this function is just to make my life easier.
 void runAllCombinations()
 {
-
     AlgorithmType algorithms[] = {Heap_Sort};
     InputType inputTypes[] = {Crescente, Decrescente, Random};
     int inputSizes[] = {10, 100, 1000, 10000, 100000, 1000000};
@@ -88,7 +87,7 @@ int main(void)
                           << "|     Heap antes da ordenacao   |" << std::endl
                           << "+-------------------------------+" << std::endl;
                 printVector(testArr);
-                algorithm.heapSort(testArr);
+                algorithm.buildMinHeap(testArr);
                 heapMin = algorithm.heapMinimum(testArr);
                 std::cout << "+-------------------------------+" << std::endl
                           << "|     Heap depois da ordenacao  |" << std::endl
@@ -105,12 +104,11 @@ int main(void)
                           << "|     Heap antes da ordenacao   |" << std::endl
                           << "+-------------------------------+" << std::endl;
                 printVector(testArr);
-                algorithm.heapSort(testArr);
+                algorithm.buildMinHeap(testArr);
                 heapMin = algorithm.heapExtractMin(testArr);
                 std::cout << "+-------------------------------+" << std::endl
                           << "|     Heap depois da ordenacao  |" << std::endl
                           << "+-------------------------------+" << std::endl;
-                algorithm.heapSort(testArr);
                 printVector(testArr);
                 std::cout << "+-------------------------------+" << std::endl
                           << "|         Elemento minimo       |" << std::endl
@@ -123,8 +121,8 @@ int main(void)
                           << "|     Heap antes da ordenacao   |" << std::endl
                           << "+-------------------------------+" << std::endl;
                 printVector(testArr);
+                algorithm.buildMinHeap(testArr);
                 algorithm.heapIncreaseKey(testArr, 2, 8);
-                algorithm.heapSort(testArr);
                 std::cout << "+-------------------------------+" << std::endl
                           << "|     Heap depois da ordenacao  |" << std::endl
                           << "+-------------------------------+" << std::endl;
@@ -136,8 +134,8 @@ int main(void)
                           << "|     Heap antes da ordenacao   |" << std::endl
                           << "+-------------------------------+" << std::endl;
                 printVector(testArr);
+                algorithm.buildMinHeap(testArr);
                 algorithm.heapInsert(testArr, 9);
-                algorithm.heapSort(testArr);
                 std::cout << "+-------------------------------+" << std::endl
                           << "|     Heap depois da ordenacao  |" << std::endl
                           << "+-------------------------------+" << std::endl;

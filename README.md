@@ -45,7 +45,7 @@ g++ -o main main.cpp
 ./main
 ```
 
-Certifique-se de ter um compilador C++ instalado no seu sistema.
+Certifique-se de ter um [compilador](https://nuwen.net/mingw.html) C++ instalado no seu sistema.
 
 ## Autor
 
